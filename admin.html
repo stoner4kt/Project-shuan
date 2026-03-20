@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FinConnectSA – Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- SheetJS for Excel export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
+          colors: {
+            brand: { 50:'#eff6ff',100:'#dbeafe',200:'#bfdbfe',400:'#60a5fa',500:'#3b82f6',600:'#1d4ed8',700:'#1e40af',800:'#1e3a8a',900:'#172554' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    /* ── Login screen ── */
+    .login-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #1d4ed8 100%);
+    }
+
+    /* ── Scrollable table ── */
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    /* ── Status badge colours ── */
+    .status-new       { background:#dbeafe; color:#1e40af; }
+    .status-contacted { background:#dcfce7; color:#166534; }
+    .status-closed    { background:#f1f5f9; color:#475569; }
+
+    /* ── Custom scrollbar ── */
+    ::-webkit-scrollbar { width:6px; height:6px; }
+    ::-webkit-scrollbar-track { background:#f1f5f9; }
+    ::-webkit-scrollbar-thumb { background:#cbd5e1; border-radius:3px; }
+    ::-webkit-scrollbar-thumb:hover { background:#94a3b8; }
+
+    /* ── Input focus ── */
+    input:focus, select:focus { outline:none; border-color:#1d4ed8; box-shadow:0 0 0 3px rgba(29,78,216,0.12); }
+
+    /* ── Loader ── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spinner { animation: spin 0.8s linear infinite; }
+
+    /* ── Fade ── */
+    @keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:none; } }
+    .fade-in { animation: fadeIn 0.3s ease both; }
+  </style>
+</head>
+<body class="bg-slate-100 min-h-screen antialiased">
+
+<!-- ════════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════ -->
+<div id="loginScreen" class="login-bg min-h-screen flex items-center justify-center p-4">
+  <div class="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8 fade-in">
+    <!-- Logo -->
+    <div class="text-center mb-8">
+      <div class="w-14 h-14 bg-brand-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-bold text-slate-900">Admin Panel</h1>
+      <p class="text-slate-500 text-sm mt-1">FinConnectSA Lead Management</p>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Password</label>
+        <input type="password" id="pwInput" placeholder="Enter admin password"
+          class="w-full border border-slate-200 rounded-lg px-4 py-3 text-sm text-slate-800 transition-all"
+          onkeydown="if(event.key==='Enter') doLogin()">
+      </div>
+      <p id="loginError" class="text-red-500 text-xs hidden">Incorrect password. Please try again.</p>
+      <button onclick="doLogin()"
+        class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 rounded-xl text-sm transition-colors shadow-lg">
+        Sign In
+      </button>
+    </div>
+
+    <p class="text-center text-slate-400 text-xs mt-6">
+      🔒 Secure admin area — authorised access only
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     ADMIN DASHBOARD (hidden until login)
+════════════════════════════════════ -->
+<div id="dashboard" class="hidden min-h-screen">
+
+  <!-- Top Nav -->
+  <nav class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+    <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16">
+      <div class="flex items-center gap-3">
+        <div class="w-9 h-9 bg-brand-600 rounded-xl flex items-center justify-center shadow">
+          <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div>
+          <span class="font-bold text-slate-900">FinConnect<span class="text-brand-600">SA</span></span>
+          <span class="text-slate-400 text-xs ml-2">Admin</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <button onclick="loadLeads()" title="Refresh"
+          class="flex items-center gap-1.5 text-slate-500 hover:text-brand-600 text-sm font-medium transition-colors">
+          <svg id="refreshIcon" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+          Refresh
+        </button>
+        <button onclick="exportExcel()"
+          class="flex items-center gap-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Export .xlsx
+        </button>
+        <button onclick="doLogout()"
+          class="flex items-center gap-1.5 text-slate-500 hover:text-red-600 text-sm font-medium transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+          Logout
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- ── Stats Cards ── -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Total Leads</p>
+        <p id="statTotal" class="text-3xl font-bold text-slate-900">–</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Today's Leads</p>
+        <p id="statToday" class="text-3xl font-bold text-brand-600">–</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">New / Uncontacted</p>
+        <p id="statNew" class="text-3xl font-bold text-amber-500">–</p>
+      </div>
+      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm">
+        <p class="text-slate-500 text-xs font-semibold uppercase tracking-wider mb-1">Closed</p>
+        <p id="statClosed" class="text-3xl font-bold text-green-600">–</p>
+      </div>
+    </div>
+
+    <!-- ── Filters & Search ── -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 mb-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Search -->
+        <div class="lg:col-span-2 relative">
+          <svg class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input id="searchInput" type="text" placeholder="Search by name, email, phone…"
+            class="w-full border border-slate-200 rounded-lg pl-9 pr-4 py-2.5 text-sm text-slate-800 transition-all"
+            oninput="applyFilters()">
+        </div>
+
+        <!-- Province filter -->
+        <select id="filterProvince" onchange="applyFilters()"
+          class="border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition-all bg-white cursor-pointer">
+          <option value="">All Provinces</option>
+          <option>Gauteng</option><option>Western Cape</option><option>KwaZulu-Natal</option>
+          <option>Eastern Cape</option><option>Limpopo</option><option>Mpumalanga</option>
+          <option>North West</option><option>Free State</option><option>Northern Cape</option>
+        </select>
+
+        <!-- Service filter -->
+        <select id="filterService" onchange="applyFilters()"
+          class="border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition-all bg-white cursor-pointer">
+          <option value="">All Services</option>
+          <option>Personal Loan</option><option>Home Loan</option><option>Vehicle Finance</option>
+          <option>Debt Review</option><option>Debt Consolidation</option>
+          <option>Credit Card Debt</option><option>Business Loan</option>
+        </select>
+
+        <!-- Date range -->
+        <div class="flex gap-2 sm:col-span-2 lg:col-span-2">
+          <div class="flex-1">
+            <label class="block text-xs text-slate-500 font-medium mb-1">From Date</label>
+            <input type="date" id="filterDateFrom" onchange="applyFilters()"
+              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 transition-all">
+          </div>
+          <div class="flex-1">
+            <label class="block text-xs text-slate-500 font-medium mb-1">To Date</label>
+            <input type="date" id="filterDateTo" onchange="applyFilters()"
+              class="w-full border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 transition-all">
+          </div>
+        </div>
+
+        <!-- Status filter + Clear -->
+        <div class="flex gap-2 items-end">
+          <select id="filterStatus" onchange="applyFilters()"
+            class="flex-1 border border-slate-200 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition-all bg-white cursor-pointer">
+            <option value="">All Statuses</option>
+            <option>New</option><option>Contacted</option><option>Closed</option>
+          </select>
+          <button onclick="clearFilters()"
+            class="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 text-sm font-medium rounded-lg transition-colors whitespace-nowrap">
+            Clear
+          </button>
+        </div>
+
+        <!-- Showing count -->
+        <div class="flex items-end lg:col-span-1">
+          <p id="showingCount" class="text-slate-400 text-xs">Loading…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Table ── -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <!-- Loading state -->
+      <div id="tableLoader" class="flex flex-col items-center justify-center py-20 text-slate-400">
+        <svg class="spinner w-8 h-8 text-brand-500 mb-3" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+        </svg>
+        <p class="text-sm">Loading leads…</p>
+      </div>
+
+      <!-- Empty state -->
+      <div id="tableEmpty" class="hidden flex-col items-center justify-center py-20 text-slate-400">
+        <svg class="w-12 h-12 mb-3 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <p class="text-sm font-medium text-slate-500">No leads found</p>
+        <p class="text-xs mt-1">Try adjusting your filters or check back later.</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="tableError" class="hidden flex-col items-center justify-center py-20">
+        <svg class="w-10 h-10 mb-3 text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <p class="text-sm font-medium text-red-500">Failed to load leads</p>
+        <p id="tableErrorMsg" class="text-xs text-slate-500 mt-1"></p>
+        <button onclick="loadLeads()" class="mt-3 text-brand-600 text-sm font-medium hover:underline">Retry</button>
+      </div>
+
+      <!-- Actual table -->
+      <div id="tableWrap" class="table-scroll hidden">
+        <table class="w-full text-sm min-w-[1100px]">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-200">
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Timestamp</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Full Name</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Email</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Phone</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">ID Number</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Province</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider max-w-[180px]">Services</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider max-w-[160px]">Message</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Consent</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
+              <th class="px-4 py-3 text-left text-xs font-bold text-slate-500 uppercase tracking-wider">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="leadsTableBody" class="divide-y divide-slate-100">
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <p class="text-center text-slate-400 text-xs mt-6">
+      FinConnectSA Admin Panel · Data stored in Google Sheets · All times in SAST
+    </p>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════ -->
+<script>
+// ─────────────────────────────────────────────
+// ⚠️  CONFIGURATION — CHANGE THESE VALUES
+// ─────────────────────────────────────────────
+
+// Password for admin access (CHANGE THIS!)
+// For production, consider using a proper auth system (Firebase Auth, Supabase, etc.)
+const ADMIN_PASSWORD = 'Admin2026';
+
+// Your Google Apps Script deployment URL (same as in index.html)
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec';
+
+// ─────────────────────────────────────────────
+// Auth
+// ─────────────────────────────────────────────
+function doLogin() {
+  const pw = document.getElementById('pwInput').value;
+  if (pw === ADMIN_PASSWORD) {
+    sessionStorage.setItem('finconnect_auth', 'true');
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    loadLeads();
+  } else {
+    document.getElementById('loginError').classList.remove('hidden');
+    document.getElementById('pwInput').value = '';
+    document.getElementById('pwInput').focus();
+  }
+}
+
+function doLogout() {
+  sessionStorage.removeItem('finconnect_auth');
+  location.reload();
+}
+
+// Check if already logged in (session persists on refresh)
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('finconnect_auth') === 'true') {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+    loadLeads();
+  }
+  // Allow Enter key on password field
+  document.getElementById('pwInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+});
+
+// ─────────────────────────────────────────────
+// Data Store
+// ─────────────────────────────────────────────
+let allLeads = []; // All raw leads from the sheet
+let filteredLeads = []; // After filters applied
+
+// ─────────────────────────────────────────────
+// Load Leads from Google Apps Script
+// ─────────────────────────────────────────────
+async function loadLeads() {
+  // Animate refresh icon
+  const icon = document.getElementById('refreshIcon');
+  icon.classList.add('spinner');
+
+  setTableState('loading');
+
+  try {
+    const res = await fetch(`${APPS_SCRIPT_URL}?action=getLeads`, {
+      method: 'GET',
+      cache: 'no-cache',
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+
+    if (!data.leads) throw new Error('Invalid response format');
+
+    allLeads = data.leads;
+    applyFilters();
+    updateStats();
+    setTableState('table');
+
+  } catch (err) {
+    console.error('Failed to load leads:', err);
+    document.getElementById('tableErrorMsg').textContent = err.message;
+    setTableState('error');
+  } finally {
+    icon.classList.remove('spinner');
+  }
+}
+
+// ─────────────────────────────────────────────
+// Stats
+// ─────────────────────────────────────────────
+function updateStats() {
+  const today = new Date().toDateString();
+
+  document.getElementById('statTotal').textContent = allLeads.length;
+  document.getElementById('statToday').textContent = allLeads.filter(l => {
+    try { return new Date(l.Timestamp).toDateString() === today; } catch { return false; }
+  }).length;
+  document.getElementById('statNew').textContent = allLeads.filter(l => !l.Status || l.Status === 'New').length;
+  document.getElementById('statClosed').textContent = allLeads.filter(l => l.Status === 'Closed').length;
+}
+
+// ─────────────────────────────────────────────
+// Filters
+// ─────────────────────────────────────────────
+function applyFilters() {
+  const search   = document.getElementById('searchInput').value.toLowerCase().trim();
+  const province = document.getElementById('filterProvince').value;
+  const service  = document.getElementById('filterService').value;
+  const status   = document.getElementById('filterStatus').value;
+  const dateFrom = document.getElementById('filterDateFrom').value;
+  const dateTo   = document.getElementById('filterDateTo').value;
+
+  filteredLeads = allLeads.filter(lead => {
+    // Search
+    if (search) {
+      const haystack = `${lead['Full Name']} ${lead.Email} ${lead.Phone} ${lead['ID Number']}`.toLowerCase();
+      if (!haystack.includes(search)) return false;
+    }
+    // Province
+    if (province && lead.Province !== province) return false;
+    // Service
+    if (service && !(lead.Services || '').includes(service)) return false;
+    // Status
+    if (status) {
+      const leadStatus = lead.Status || 'New';
+      if (leadStatus !== status) return false;
+    }
+    // Date range
+    if (dateFrom || dateTo) {
+      const ts = new Date(lead.Timestamp);
+      if (dateFrom && ts < new Date(dateFrom)) return false;
+      if (dateTo) {
+        const toDate = new Date(dateTo);
+        toDate.setHours(23,59,59);
+        if (ts > toDate) return false;
+      }
+    }
+    return true;
+  });
+
+  renderTable();
+  document.getElementById('showingCount').textContent =
+    `Showing ${filteredLeads.length} of ${allLeads.length} leads`;
+}
+
+function clearFilters() {
+  document.getElementById('searchInput').value = '';
+  document.getElementById('filterProvince').value = '';
+  document.getElementById('filterService').value = '';
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('filterDateFrom').value = '';
+  document.getElementById('filterDateTo').value = '';
+  applyFilters();
+}
+
+// ─────────────────────────────────────────────
+// Render Table
+// ─────────────────────────────────────────────
+function renderTable() {
+  const tbody = document.getElementById('leadsTableBody');
+
+  if (filteredLeads.length === 0) {
+    setTableState('empty');
+    return;
+  }
+
+  setTableState('table');
+
+  tbody.innerHTML = filteredLeads.map((lead, idx) => {
+    const status = lead.Status || 'New';
+    const statusClass = status === 'New' ? 'status-new' : status === 'Contacted' ? 'status-contacted' : 'status-closed';
+    const ts = formatTimestamp(lead.Timestamp);
+    const rowIndex = lead._rowIndex; // row index in the sheet (for updates)
+
+    return `
+      <tr class="hover:bg-slate-50 transition-colors" id="row-${rowIndex}">
+        <td class="px-4 py-3 text-xs text-slate-500 whitespace-nowrap">${ts}</td>
+        <td class="px-4 py-3 font-semibold text-slate-800 whitespace-nowrap">${esc(lead['Full Name'])}</td>
+        <td class="px-4 py-3 text-slate-600 whitespace-nowrap">
+          <a href="mailto:${esc(lead.Email)}" class="hover:text-brand-600 transition-colors">${esc(lead.Email)}</a>
+        </td>
+        <td class="px-4 py-3 text-slate-600 whitespace-nowrap">
+          <a href="tel:${esc(lead.Phone)}" class="hover:text-brand-600 transition-colors">${esc(lead.Phone)}</a>
+        </td>
+        <td class="px-4 py-3 text-slate-500 text-xs">${esc(lead['ID Number'] || '—')}</td>
+        <td class="px-4 py-3 text-slate-600 whitespace-nowrap">${esc(lead.Province || '—')}</td>
+        <td class="px-4 py-3 max-w-[180px]">
+          <div class="flex flex-wrap gap-1">
+            ${(lead.Services || '').split(',').filter(Boolean).map(s =>
+              `<span class="inline-block bg-brand-50 text-brand-700 text-xs px-2 py-0.5 rounded-full font-medium whitespace-nowrap">${esc(s.trim())}</span>`
+            ).join('')}
+          </div>
+        </td>
+        <td class="px-4 py-3 text-slate-500 text-xs max-w-[160px]">
+          <span title="${esc(lead.Message || '')}" class="block truncate">${esc(lead.Message || '—')}</span>
+        </td>
+        <td class="px-4 py-3">
+          <span class="text-xs font-medium ${lead.Consent === 'Yes' ? 'text-green-600' : 'text-red-500'}">${lead.Consent || '—'}</span>
+        </td>
+        <td class="px-4 py-3">
+          <select onchange="updateStatus(${rowIndex}, this.value)"
+            class="${statusClass} text-xs font-semibold px-2.5 py-1.5 rounded-lg border-0 cursor-pointer transition-all focus:ring-0"
+            title="Change status">
+            <option ${status==='New'?'selected':''}>New</option>
+            <option ${status==='Contacted'?'selected':''}>Contacted</option>
+            <option ${status==='Closed'?'selected':''}>Closed</option>
+          </select>
+        </td>
+        <td class="px-4 py-3">
+          <div class="flex items-center gap-2">
+            <button onclick="markContacted(${rowIndex})"
+              class="text-xs bg-brand-600 hover:bg-brand-700 text-white px-3 py-1.5 rounded-lg font-medium transition-colors whitespace-nowrap">
+              ✓ Contacted
+            </button>
+            <button onclick="deleteLead(${rowIndex})"
+              class="text-xs bg-red-50 hover:bg-red-100 text-red-600 px-2.5 py-1.5 rounded-lg font-medium transition-colors"
+              title="Delete lead">
+              ✕
+            </button>
+          </div>
+        </td>
+      </tr>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
+// Update Status
+// ─────────────────────────────────────────────
+async function updateStatus(rowIndex, newStatus) {
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'updateStatus', rowIndex, status: newStatus }),
+    });
+    // Optimistically update local data
+    const lead = allLeads.find(l => l._rowIndex === rowIndex);
+    if (lead) {
+      lead.Status = newStatus;
+      updateStats();
+    }
+  } catch (err) {
+    console.error('Update failed:', err);
+    alert('Failed to update status. Please refresh and try again.');
+  }
+}
+
+async function markContacted(rowIndex) {
+  await updateStatus(rowIndex, 'Contacted');
+  // Update the select dropdown in the row
+  const row = document.getElementById(`row-${rowIndex}`);
+  if (row) {
+    const sel = row.querySelector('select');
+    if (sel) {
+      sel.value = 'Contacted';
+      sel.className = 'status-contacted text-xs font-semibold px-2.5 py-1.5 rounded-lg border-0 cursor-pointer transition-all focus:ring-0';
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// Delete Lead
+// ─────────────────────────────────────────────
+async function deleteLead(rowIndex) {
+  const lead = allLeads.find(l => l._rowIndex === rowIndex);
+  const name = lead ? lead['Full Name'] : `row ${rowIndex}`;
+
+  if (!confirm(`Delete lead for "${name}"?\n\nThis will remove the row from Google Sheets and cannot be undone.`)) return;
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'deleteRow', rowIndex }),
+    });
+
+    // Optimistically remove from local array
+    allLeads = allLeads.filter(l => l._rowIndex !== rowIndex);
+    filteredLeads = filteredLeads.filter(l => l._rowIndex !== rowIndex);
+    renderTable();
+    updateStats();
+    document.getElementById('showingCount').textContent =
+      `Showing ${filteredLeads.length} of ${allLeads.length} leads`;
+
+  } catch (err) {
+    console.error('Delete failed:', err);
+    alert('Failed to delete. Please refresh and try again.');
+  }
+}
+
+// ─────────────────────────────────────────────
+// Export to Excel (.xlsx) via SheetJS
+// ─────────────────────────────────────────────
+function exportExcel() {
+  if (filteredLeads.length === 0) {
+    alert('No leads to export. Adjust your filters first.');
+    return;
+  }
+
+  // Build rows without the internal _rowIndex field
+  const exportData = filteredLeads.map(lead => ({
+    'Timestamp':  lead.Timestamp   || '',
+    'Full Name':  lead['Full Name']|| '',
+    'Email':      lead.Email       || '',
+    'Phone':      lead.Phone       || '',
+    'ID Number':  lead['ID Number']|| '',
+    'Province':   lead.Province    || '',
+    'Services':   lead.Services    || '',
+    'Message':    lead.Message     || '',
+    'Consent':    lead.Consent     || '',
+    'Status':     lead.Status      || 'New',
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+  // Set column widths
+  worksheet['!cols'] = [
+    { wch: 22 }, // Timestamp
+    { wch: 20 }, // Full Name
+    { wch: 28 }, // Email
+    { wch: 16 }, // Phone
+    { wch: 16 }, // ID Number
+    { wch: 16 }, // Province
+    { wch: 40 }, // Services
+    { wch: 40 }, // Message
+    { wch: 10 }, // Consent
+    { wch: 12 }, // Status
+  ];
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Leads');
+
+  const filename = `FinConnectSA_Leads_${new Date().toISOString().slice(0,10)}.xlsx`;
+  XLSX.writeFile(workbook, filename);
+}
+
+// ─────────────────────────────────────────────
+// Helpers
+// ─────────────────────────────────────────────
+function setTableState(state) {
+  document.getElementById('tableLoader').style.display = state === 'loading' ? 'flex' : 'none';
+  document.getElementById('tableEmpty').style.display  = state === 'empty'   ? 'flex' : 'none';
+  document.getElementById('tableError').style.display  = state === 'error'   ? 'flex' : 'none';
+  document.getElementById('tableWrap').classList.toggle('hidden', state !== 'table');
+}
+
+function esc(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function formatTimestamp(ts) {
+  if (!ts) return '—';
+  try {
+    const d = new Date(ts);
+    return d.toLocaleString('en-ZA', {
+      day:'2-digit', month:'short', year:'numeric',
+      hour:'2-digit', minute:'2-digit'
+    });
+  } catch { return ts; }
+}
+</script>
+</body>
+</html>
