@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>FinConnect SA – Loans, Debt Review & Financial Solutions</title>
-  <meta name="description" content="Get matched with the best loans and debt solutions in South Africa. Free, confidential, and fast. Personal loans, home loans, debt review and more." />
+  <title>ClearPath Finance – Debt Consolidation, Loans & Financial Solutions</title>
+  <meta name="description" content="Get matched with trusted debt consolidation, personal loan, and financial solutions in South Africa. Fast, secure, and completely free." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
@@ -14,7 +15,7 @@
         extend: {
           colors: {
             brand: {
-              50:  '#eff6ff',
+              50: '#eff6ff',
               100: '#dbeafe',
               200: '#bfdbfe',
               400: '#60a5fa',
@@ -31,19 +32,21 @@
           fontFamily: {
             sans: ['Plus Jakarta Sans', 'sans-serif'],
             serif: ['Instrument Serif', 'serif'],
+          },
+          boxShadow: {
+            soft: '0 24px 60px rgba(15, 23, 42, 0.14)',
           }
         }
       }
     }
   </script>
   <style>
-    /* ── Base ── */
     *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; }
 
-    /* ── Hero gradient mesh ── */
     .hero-bg {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 40%, #1d4ed8 70%, #2563eb 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 42%, #1d4ed8 74%, #2563eb 100%);
       position: relative;
       overflow: hidden;
     }
@@ -51,40 +54,26 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 70% 40%, rgba(96,165,250,0.18) 0%, transparent 70%),
-                  radial-gradient(ellipse 50% 50% at 10% 80%, rgba(30,58,138,0.5) 0%, transparent 60%);
+      background:
+        radial-gradient(ellipse 75% 55% at 15% 15%, rgba(255,255,255,0.08), transparent 60%),
+        radial-gradient(ellipse 70% 55% at 85% 25%, rgba(96,165,250,0.18), transparent 65%),
+        radial-gradient(ellipse 50% 45% at 50% 100%, rgba(30,64,175,0.35), transparent 70%);
       pointer-events: none;
     }
     .hero-bg::after {
       content: '';
       position: absolute;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      background-image: url("data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Ccircle cx='32' cy='32' r='1.5'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
       pointer-events: none;
     }
 
-    /* ── Animated badge ── */
-    @keyframes pulse-ring {
-      0%   { transform: scale(1); opacity: 0.6; }
-      100% { transform: scale(1.5); opacity: 0; }
-    }
-    .pulse-dot::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      background: #22c55e;
-      animation: pulse-ring 1.6s ease-out infinite;
-    }
-
-    /* ── Form card glass ── */
     .form-card {
-      background: rgba(255,255,255,0.97);
+      background: rgba(255,255,255,0.98);
       backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.65);
     }
 
-    /* ── Checkbox custom style ── */
     .custom-checkbox {
       appearance: none;
       width: 18px;
@@ -93,7 +82,7 @@
       border-radius: 4px;
       flex-shrink: 0;
       cursor: pointer;
-      transition: all 0.15s;
+      transition: all 0.15s ease;
       position: relative;
       background: white;
     }
@@ -104,27 +93,27 @@
     .custom-checkbox:checked::after {
       content: '';
       position: absolute;
-      left: 4px; top: 1px;
-      width: 6px; height: 10px;
+      left: 4px;
+      top: 1px;
+      width: 6px;
+      height: 10px;
       border: 2px solid white;
       border-top: none;
       border-left: none;
       transform: rotate(45deg);
     }
 
-    /* ── Input focus ── */
     .form-input:focus {
       outline: none;
       border-color: #1d4ed8;
-      box-shadow: 0 0 0 3px rgba(29,78,216,0.12);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
     }
 
-    /* ── Button ── */
     .cta-btn {
       background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
-      transition: all 0.2s;
       position: relative;
       overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .cta-btn::before {
       content: '';
@@ -132,649 +121,586 @@
       inset: 0;
       background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
       opacity: 0;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s ease;
     }
     .cta-btn:hover::before { opacity: 1; }
+    .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 20px 40px rgba(29, 78, 216, 0.24); }
     .cta-btn:active { transform: scale(0.99); }
 
-    /* ── Trust bar ── */
-    .trust-item {
-      border-right: 1px solid rgba(255,255,255,0.15);
+    .service-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     }
-    .trust-item:last-child { border-right: none; }
+    .service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+    }
 
-    /* ── Service checkbox cards ── */
     .service-card input:checked + label {
       background: #eff6ff;
       border-color: #1d4ed8;
       color: #1e40af;
     }
-    .service-card label {
-      transition: all 0.15s;
+
+    .media-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.5rem;
+      background: #e2e8f0;
+      min-height: 100%;
+    }
+    .media-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
     }
 
-    /* ── Fade in ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .fade-up {
+      animation: fadeUp 0.6s ease both;
     }
-    .fade-up { animation: fadeUp 0.6s ease both; }
     .delay-1 { animation-delay: 0.1s; }
     .delay-2 { animation-delay: 0.2s; }
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
 
-    /* ── Success overlay ── */
-    #successMsg { display: none; }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
-    /* ── Section divider wave ── */
+    #successMsg { display: none; }
     .wave-divider svg { display: block; }
   </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
-
-<!-- ════════════════════════════════
-     NAVIGATION
-════════════════════════════════ -->
-<nav class="absolute top-0 left-0 right-0 z-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
-    <!-- Logo -->
-    <div class="flex items-center gap-2.5">
-      <div class="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-md shadow-blue-900/30">
-        <svg class="w-5 h-5 text-brand-700" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
-          <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
-        </svg>
+  <nav class="absolute top-0 left-0 right-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between gap-4">
+      <a href="#top" class="flex items-center gap-2.5 min-w-0">
+        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center shadow-md shadow-blue-900/30 flex-shrink-0">
+          <svg class="w-5 h-5 text-brand-700" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/>
+            <path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <span class="text-white font-bold text-lg sm:text-xl tracking-tight">ClearPath<span class="text-brand-300">Finance</span></span>
+      </a>
+      <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-blue-100">
+        <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
+        <a href="#services" class="hover:text-white transition-colors">Services</a>
+        <a href="#why-us" class="hover:text-white transition-colors">Why Choose Us</a>
+        <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+        <a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a>
+        <a href="legal.html" class="hover:text-white transition-colors">Legal</a>
+        <a href="#apply" class="ml-1 bg-white text-brand-700 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors font-semibold shadow">Apply Now</a>
       </div>
-      <span class="text-white font-bold text-xl tracking-tight">FinConnect<span class="text-brand-300">SA</span></span>
+      <a href="#apply" class="lg:hidden bg-white text-brand-700 px-3 py-2 rounded-lg text-sm font-semibold shadow-sm">Apply Now</a>
     </div>
-    <!-- Nav links -->
-    <div class="hidden md:flex items-center gap-7 text-sm font-medium text-blue-100">
-      <a href="#how-it-works" class="hover:text-white transition-colors">How It Works</a>
-      <a href="#services" class="hover:text-white transition-colors">Services</a>
-      <a href="#why-us" class="hover:text-white transition-colors">Why Us</a>
-      <a href="#apply" class="ml-2 bg-white text-brand-700 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors font-semibold shadow">Apply Now</a>
-    </div>
-    <!-- Mobile apply -->
-    <a href="#apply" class="md:hidden bg-white text-brand-700 px-3 py-1.5 rounded-lg text-sm font-semibold">Apply</a>
-  </div>
-</nav>
+  </nav>
 
-<!-- ════════════════════════════════
-     HERO
-════════════════════════════════ -->
-<section class="hero-bg pt-28 pb-0 md:pt-36">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-
-      <!-- Left: Copy -->
-      <div class="relative z-10 pb-12 lg:pb-24">
-        <!-- Live badge -->
-        <div class="fade-up inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6">
-          <span class="relative flex h-2 w-2">
-            <span class="pulse-dot relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
-          </span>
-          <span class="text-green-300 text-xs font-semibold uppercase tracking-wider">Free & Confidential</span>
-        </div>
-
-        <h1 class="fade-up delay-1 font-serif text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.1] mb-6">
-          Get Matched with the<br/>
-          <span class="italic text-blue-300">Best Loans</span> &<br/>
-          Debt Solutions
-        </h1>
-
-        <p class="fade-up delay-2 text-blue-100 text-lg leading-relaxed mb-8 max-w-lg">
-          South Africa's trusted loan and debt matching platform. We connect you with NCR-registered lenders and debt review companies — at no cost to you.
-        </p>
-
-        <!-- Trust signals inline -->
-        <div class="fade-up delay-3 flex flex-wrap gap-4 mb-10">
-          <div class="flex items-center gap-2 text-blue-100 text-sm">
-            <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            NCR-Registered Partners
-          </div>
-          <div class="flex items-center gap-2 text-blue-100 text-sm">
-            <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            POPIA Compliant
-          </div>
-          <div class="flex items-center gap-2 text-blue-100 text-sm">
-            <svg class="w-4 h-4 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            No Credit Check to Apply
-          </div>
-        </div>
-
-        <!-- Stats -->
-        <div class="fade-up delay-4 grid grid-cols-3 gap-px bg-white/10 rounded-2xl overflow-hidden border border-white/10">
-          <div class="bg-white/5 px-5 py-4 text-center">
-            <div class="text-2xl font-bold text-white">12k+</div>
-            <div class="text-blue-200 text-xs mt-0.5">Clients Helped</div>
-          </div>
-          <div class="bg-white/5 px-5 py-4 text-center">
-            <div class="text-2xl font-bold text-white">48h</div>
-            <div class="text-blue-200 text-xs mt-0.5">Avg. Response</div>
-          </div>
-          <div class="bg-white/5 px-5 py-4 text-center">
-            <div class="text-2xl font-bold text-white">Free</div>
-            <div class="text-blue-200 text-xs mt-0.5">Always</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right: Form card -->
-      <div id="apply" class="relative z-10 lg:-mb-10">
-        <div class="form-card rounded-2xl shadow-2xl shadow-blue-900/40 p-7 sm:p-9">
-          <div class="mb-6">
-            <h2 class="text-slate-900 text-2xl font-bold mb-1">Apply in 2 Minutes</h2>
-            <p class="text-slate-500 text-sm">Fill in the form and we'll match you with the right solution.</p>
-          </div>
-
-          <!-- Success message (hidden by default) -->
-          <div id="successMsg" class="text-center py-8">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
-            </div>
-            <h3 class="text-xl font-bold text-slate-800 mb-2">Application Received!</h3>
-            <p class="text-slate-500 text-sm max-w-xs mx-auto">Thank you! A consultant will contact you within 48 hours to discuss your options.</p>
-          </div>
-
-          <!-- The Form -->
-          <form id="leadForm" novalidate>
-
-            <!-- Row 1: Full Name -->
-            <div class="mb-4">
-              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="fullName">Full Name <span class="text-red-500">*</span></label>
-              <input id="fullName" name="fullName" type="text" required placeholder="e.g. Thabo Nkosi"
-                class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
-              <p class="text-red-500 text-xs mt-1 hidden" data-error="fullName">Please enter your full name.</p>
+  <main id="top">
+    <section class="hero-bg pt-28 pb-0 md:pt-36">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
+          <div class="relative z-10 pb-10 lg:pb-24">
+            <div class="fade-up inline-flex items-center gap-2 bg-white/10 border border-white/20 rounded-full px-4 py-1.5 mb-6 text-blue-50">
+              <span class="w-2.5 h-2.5 rounded-full bg-green-400 shadow-[0_0_0_6px_rgba(74,222,128,0.16)]"></span>
+              <span class="text-xs font-semibold uppercase tracking-[0.24em]">Fast, secure, and free</span>
             </div>
 
-            <!-- Row 2: Email + Phone -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="email">Email <span class="text-red-500">*</span></label>
-                <input id="email" name="email" type="email" required placeholder="you@email.com"
-                  class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
-                <p class="text-red-500 text-xs mt-1 hidden" data-error="email">Please enter a valid email.</p>
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="phone">Phone Number <span class="text-red-500">*</span></label>
-                <input id="phone" name="phone" type="tel" required placeholder="0XX XXX XXXX"
-                  class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
-                <p class="text-red-500 text-xs mt-1 hidden" data-error="phone">Please enter a valid phone number.</p>
-              </div>
-            </div>
+            <h1 class="fade-up delay-1 font-serif text-4xl sm:text-5xl lg:text-6xl text-white leading-[1.05] mb-6 max-w-3xl">
+              Struggling with Debt? Get Matched with the <span class="italic text-blue-300">Right Solution</span> Today
+            </h1>
 
-            <!-- Row 3: ID Number + Province -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="idNumber">ID Number <span class="text-slate-400 font-normal text-xs">(optional)</span></label>
-                <input id="idNumber" name="idNumber" type="text" maxlength="13" placeholder="13-digit SA ID"
-                  class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
-              </div>
-              <div>
-                <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="province">Province <span class="text-red-500">*</span></label>
-                <select id="province" name="province" required
-                  class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 transition-all bg-white appearance-none cursor-pointer">
-                  <option value="">Select province…</option>
-                  <option>Gauteng</option>
-                  <option>Western Cape</option>
-                  <option>KwaZulu-Natal</option>
-                  <option>Eastern Cape</option>
-                  <option>Limpopo</option>
-                  <option>Mpumalanga</option>
-                  <option>North West</option>
-                  <option>Free State</option>
-                  <option>Northern Cape</option>
-                </select>
-                <p class="text-red-500 text-xs mt-1 hidden" data-error="province">Please select your province.</p>
-              </div>
-            </div>
-
-            <!-- Services needed -->
-            <div class="mb-5">
-              <label class="block text-sm font-semibold text-slate-700 mb-2">Services Needed <span class="text-red-500">*</span></label>
-              <div class="grid grid-cols-2 gap-2" id="servicesGroup">
-                <!-- Each service card -->
-                <div class="service-card">
-                  <input type="checkbox" name="services" id="svc1" value="Personal Loan" class="sr-only">
-                  <label for="svc1" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                    Personal Loan
-                  </label>
-                </div>
-                <div class="service-card">
-                  <input type="checkbox" name="services" id="svc2" value="Home Loan" class="sr-only">
-                  <label for="svc2" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-                    Home Loan
-                  </label>
-                </div>
-                <div class="service-card">
-                  <input type="checkbox" name="services" id="svc3" value="Vehicle Finance" class="sr-only">
-                  <label for="svc3" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2-2m10 0l2 2M1 12h14M9 5h6l2 3M9 5v3"/></svg>
-                    Vehicle Finance
-                  </label>
-                </div>
-                <div class="service-card">
-                  <input type="checkbox" name="services" id="svc4" value="Debt Review" class="sr-only">
-                  <label for="svc4" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-                    Debt Review
-                  </label>
-                </div>
-                <div class="service-card">
-                  <input type="checkbox" name="services" id="svc5" value="Debt Consolidation" class="sr-only">
-                  <label for="svc5" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
-                    Debt Consolidation
-                  </label>
-                </div>
-                <div class="service-card">
-                  <input type="checkbox" name="services" id="svc6" value="Credit Card Debt" class="sr-only">
-                  <label for="svc6" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-                    Credit Card Debt
-                  </label>
-                </div>
-                <div class="service-card col-span-2">
-                  <input type="checkbox" name="services" id="svc7" value="Business Loan" class="sr-only">
-                  <label for="svc7" class="flex items-center gap-2 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-600 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
-                    <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-                    Business Loan
-                  </label>
-                </div>
-              </div>
-              <p class="text-red-500 text-xs mt-1 hidden" data-error="services">Please select at least one service.</p>
-            </div>
-
-            <!-- Additional message -->
-            <div class="mb-5">
-              <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="message">Additional Notes <span class="text-slate-400 font-normal text-xs">(optional)</span></label>
-              <textarea id="message" name="message" rows="3" placeholder="Tell us more about your situation or specific requirements…"
-                class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all resize-none"></textarea>
-            </div>
-
-            <!-- POPIA Consent -->
-            <div class="mb-6 bg-slate-50 border border-slate-200 rounded-xl p-4">
-              <label class="flex gap-3 cursor-pointer">
-                <input type="checkbox" id="consent" name="consent" required class="custom-checkbox mt-0.5">
-                <span class="text-xs text-slate-600 leading-relaxed">
-                  <span class="font-semibold text-slate-700">POPIA Consent (required):</span> I consent to FinConnect SA collecting and processing my personal information in accordance with the Protection of Personal Information Act (POPIA) for the purpose of matching me with appropriate financial service providers. I understand my data will not be sold to third parties.
-                </span>
-              </label>
-              <p class="text-red-500 text-xs mt-2 hidden ml-7" data-error="consent">You must accept the POPIA consent to proceed.</p>
-            </div>
-
-            <!-- Submit button -->
-            <button type="submit" id="submitBtn"
-              class="cta-btn relative w-full text-white font-bold py-3.5 rounded-xl text-sm tracking-wide shadow-lg shadow-blue-600/30 overflow-hidden">
-              <span id="btnText" class="relative z-10 flex items-center justify-center gap-2">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
-                Submit My Application
-              </span>
-              <span id="btnLoading" class="relative z-10 hidden items-center justify-center gap-2">
-                <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                Submitting…
-              </span>
-            </button>
-
-            <!-- Error message -->
-            <p id="formError" class="text-red-500 text-xs text-center mt-3 hidden"></p>
-
-            <p class="text-center text-slate-400 text-xs mt-4">
-              🔒 Your information is encrypted and secure. We never share or sell your data.
+            <p class="fade-up delay-2 text-blue-100 text-lg leading-relaxed mb-8 max-w-2xl">
+              We help South Africans find trusted debt consolidation, loan, and financial solutions — fast, secure, and completely free.
             </p>
 
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Wave divider -->
-  <div class="wave-divider mt-12 lg:mt-0">
-    <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-12 lg:h-16">
-      <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8fafc"/>
-    </svg>
-  </div>
-</section>
-
-<!-- ════════════════════════════════
-     HOW IT WORKS
-════════════════════════════════ -->
-<section id="how-it-works" class="py-20 bg-slate-50">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14">
-      <span class="inline-block text-brand-600 text-xs font-bold uppercase tracking-widest mb-3">Simple Process</span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">How It Works</h2>
-      <p class="text-slate-500 max-w-xl mx-auto">Three easy steps to get matched with the best financial solution for your needs.</p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
-      <!-- Connector line (desktop) -->
-      <div class="hidden md:block absolute top-10 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-brand-200 via-brand-400 to-brand-200 z-0"></div>
-
-      <!-- Step 1 -->
-      <div class="relative z-10 bg-white rounded-2xl p-7 shadow-sm border border-slate-100 hover:shadow-md hover:border-brand-100 transition-all">
-        <div class="w-14 h-14 bg-brand-600 rounded-2xl flex items-center justify-center text-white text-xl font-bold mb-5 shadow-lg shadow-brand-600/25">1</div>
-        <h3 class="text-lg font-bold text-slate-800 mb-2">Complete the Form</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Fill in your details and select the financial services you need. It takes under 2 minutes.</p>
-      </div>
-
-      <!-- Step 2 -->
-      <div class="relative z-10 bg-white rounded-2xl p-7 shadow-sm border border-slate-100 hover:shadow-md hover:border-brand-100 transition-all">
-        <div class="w-14 h-14 bg-brand-600 rounded-2xl flex items-center justify-center text-white text-xl font-bold mb-5 shadow-lg shadow-brand-600/25">2</div>
-        <h3 class="text-lg font-bold text-slate-800 mb-2">We Find Your Match</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">Our team reviews your application and matches you with suitable NCR-registered providers.</p>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="relative z-10 bg-white rounded-2xl p-7 shadow-sm border border-slate-100 hover:shadow-md hover:border-brand-100 transition-all">
-        <div class="w-14 h-14 bg-brand-600 rounded-2xl flex items-center justify-center text-white text-xl font-bold mb-5 shadow-lg shadow-brand-600/25">3</div>
-        <h3 class="text-lg font-bold text-slate-800 mb-2">Get Your Solution</h3>
-        <p class="text-slate-500 text-sm leading-relaxed">A consultant contacts you within 48 hours with personalised options — all at no cost to you.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════
-     SERVICES
-════════════════════════════════ -->
-<section id="services" class="py-20 bg-white">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-14">
-      <span class="inline-block text-brand-600 text-xs font-bold uppercase tracking-widest mb-3">What We Offer</span>
-      <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">Financial Services We Match</h2>
-      <p class="text-slate-500 max-w-xl mx-auto">From loans to debt relief, we connect you with the right South African financial service provider.</p>
-    </div>
-
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      <!-- Service cards -->
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Personal Loan</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">Quick cash loans for any purpose</p>
-      </div>
-
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Home Loan</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">Bond & mortgage solutions</p>
-      </div>
-
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10l2 2m10-2l2-2M1 12h14"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Vehicle Finance</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">Cars, bakkies & more</p>
-      </div>
-
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Debt Review</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">Legal debt protection (NCA)</p>
-      </div>
-
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Debt Consolidation</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">Combine all debts into one</p>
-      </div>
-
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Credit Card Debt</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">Reduce card interest rates</p>
-      </div>
-
-      <div class="group bg-slate-50 hover:bg-brand-600 border border-slate-100 hover:border-brand-600 rounded-2xl p-5 transition-all cursor-default">
-        <div class="w-10 h-10 bg-brand-100 group-hover:bg-white/20 rounded-xl flex items-center justify-center mb-3 transition-colors">
-          <svg class="w-5 h-5 text-brand-600 group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-        </div>
-        <h4 class="font-bold text-slate-800 group-hover:text-white text-sm transition-colors">Business Loan</h4>
-        <p class="text-slate-500 group-hover:text-blue-100 text-xs mt-1 transition-colors">SME & startup funding</p>
-      </div>
-
-      <!-- CTA card -->
-      <div class="bg-brand-600 rounded-2xl p-5 flex flex-col justify-between">
-        <p class="text-white text-sm font-medium leading-relaxed">Not sure what you need? Apply and we'll guide you.</p>
-        <a href="#apply" class="mt-3 inline-block bg-white text-brand-700 text-xs font-bold px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors text-center">Apply Free →</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ════════════════════════════════
-     WHY US / TRUST
-════════════════════════════════ -->
-<section id="why-us" class="py-20 bg-slate-900">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
-      <div>
-        <span class="inline-block text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">Why Choose Us</span>
-        <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">South Africa's Most Trusted<br/><span class="text-brand-400">Financial Matching Service</span></h2>
-        <p class="text-slate-400 leading-relaxed mb-8">We partner exclusively with NCR-registered and NCA-compliant financial service providers, ensuring you receive legitimate, regulated financial advice and products.</p>
-
-        <div class="space-y-4">
-          <div class="flex gap-4 items-start">
-            <div class="w-8 h-8 bg-green-500/15 border border-green-500/25 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <div class="fade-up delay-3 flex flex-col sm:flex-row gap-4 sm:items-center mb-8">
+              <a href="#apply" class="cta-btn inline-flex items-center justify-center px-6 py-3.5 rounded-xl font-bold text-white shadow-lg shadow-blue-900/25 text-sm sm:text-base">
+                <span class="relative z-10">Apply Now — It’s FREE</span>
+              </a>
+              <div class="inline-flex items-center gap-2 text-blue-100 text-sm font-medium">
+                <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                No Obligation to Apply
+              </div>
             </div>
-            <div>
-              <h4 class="text-white font-semibold text-sm">100% Free Service</h4>
-              <p class="text-slate-400 text-xs mt-0.5">You never pay us anything. Our service is funded by our partner providers.</p>
+
+            <div class="fade-up delay-4 grid gap-3 sm:grid-cols-3 mb-8">
+              <div class="rounded-2xl border border-white/12 bg-white/8 px-4 py-4 backdrop-blur-sm">
+                <div class="text-3xl font-bold text-white">12,000+</div>
+                <div class="text-sm text-blue-100 mt-1">Clients Assisted</div>
+              </div>
+              <div class="rounded-2xl border border-white/12 bg-white/8 px-4 py-4 backdrop-blur-sm">
+                <div class="text-3xl font-bold text-white">48 Hours</div>
+                <div class="text-sm text-blue-100 mt-1">Average Response Time</div>
+              </div>
+              <div class="rounded-2xl border border-white/12 bg-white/8 px-4 py-4 backdrop-blur-sm">
+                <div class="text-3xl font-bold text-white">100% Free</div>
+                <div class="text-sm text-blue-100 mt-1">No Hidden Fees</div>
+              </div>
+            </div>
+
+            <div class="rounded-2xl bg-slate-950/20 border border-white/10 p-4 sm:p-5 backdrop-blur-sm">
+              <div class="text-xs font-bold uppercase tracking-[0.2em] text-blue-200 mb-3">Trust Bar</div>
+              <div class="grid gap-3 sm:grid-cols-3 text-sm text-white">
+                <div class="flex items-center gap-2 rounded-xl bg-white/8 px-3 py-3 min-w-0">
+                  <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  <span>✔ NCR-Registered Partners</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-xl bg-white/8 px-3 py-3 min-w-0">
+                  <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  <span>✔ POPIA Compliant</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-xl bg-white/8 px-3 py-3 min-w-0">
+                  <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                  <span>✔ No Obligation</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="flex gap-4 items-start">
-            <div class="w-8 h-8 bg-green-500/15 border border-green-500/25 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            </div>
-            <div>
-              <h4 class="text-white font-semibold text-sm">POPIA & NCA Compliant</h4>
-              <p class="text-slate-400 text-xs mt-0.5">We operate fully within South African data protection and credit laws.</p>
-            </div>
-          </div>
-          <div class="flex gap-4 items-start">
-            <div class="w-8 h-8 bg-green-500/15 border border-green-500/25 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            </div>
-            <div>
-              <h4 class="text-white font-semibold text-sm">No Credit Score Impact</h4>
-              <p class="text-slate-400 text-xs mt-0.5">Submitting your application does not affect your credit score.</p>
-            </div>
-          </div>
-          <div class="flex gap-4 items-start">
-            <div class="w-8 h-8 bg-green-500/15 border border-green-500/25 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
-              <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
-            </div>
-            <div>
-              <h4 class="text-white font-semibold text-sm">Multiple Providers Compared</h4>
-              <p class="text-slate-400 text-xs mt-0.5">One application, multiple options. We do the legwork for you.</p>
+
+          <div id="apply" class="relative z-10 lg:-mb-12">
+            <div class="form-card rounded-[1.75rem] shadow-2xl shadow-blue-900/30 p-6 sm:p-8 lg:p-9">
+              <div class="grid gap-5 lg:grid-cols-[1.08fr_0.92fr] items-start mb-7">
+                <div>
+                  <h2 class="text-slate-900 text-2xl sm:text-[1.75rem] font-bold mb-2">Apply in Under 2 Minutes</h2>
+                  <p class="text-slate-500 text-sm sm:text-base leading-relaxed">Fill in your details and we’ll match you with the right solution quickly, securely, and at no cost to you.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-1 xl:grid-cols-2">
+                  <figure class="media-card aspect-[4/3] shadow-soft">
+                    <img src="assets/images/IMG_3454.JPG" alt="Financial professional reviewing loan and debt options on a tablet" loading="lazy" decoding="async" width="4536" height="3027" />
+                  </figure>
+                  <figure class="media-card aspect-[4/3] shadow-soft">
+                    <img src="assets/images/IMG_3460.JPG" alt="Advisor discussing financial planning solutions with a client" loading="lazy" decoding="async" width="3840" height="2160" />
+                  </figure>
+                </div>
+              </div>
+
+              <div id="successMsg" class="text-center py-8">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">Application Received!</h3>
+                <p class="text-slate-500 text-sm max-w-sm mx-auto">Thank you. One of our trusted partners will review your request and contact you within 48 hours with suitable options.</p>
+              </div>
+
+              <form id="leadForm" novalidate>
+                <div class="mb-4">
+                  <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="fullName">Full Name <span class="text-red-500">*</span></label>
+                  <input id="fullName" name="fullName" type="text" required placeholder="e.g. Thabo Nkosi" class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
+                  <p class="text-red-500 text-xs mt-1 hidden" data-error="fullName">Please enter your full name.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="email">Email <span class="text-red-500">*</span></label>
+                    <input id="email" name="email" type="email" required placeholder="you@email.com" class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error="email">Please enter a valid email.</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="phone">Phone Number <span class="text-red-500">*</span></label>
+                    <input id="phone" name="phone" type="tel" required placeholder="0XX XXX XXXX" class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error="phone">Please enter a valid phone number.</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="province">Province <span class="text-red-500">*</span></label>
+                    <select id="province" name="province" required class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 transition-all bg-white appearance-none cursor-pointer">
+                      <option value="">Select province…</option>
+                      <option>Gauteng</option>
+                      <option>Western Cape</option>
+                      <option>KwaZulu-Natal</option>
+                      <option>Eastern Cape</option>
+                      <option>Limpopo</option>
+                      <option>Mpumalanga</option>
+                      <option>North West</option>
+                      <option>Free State</option>
+                      <option>Northern Cape</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error="province">Please select your province.</p>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="idNumber">ID Number <span class="text-slate-400 font-normal text-xs">(optional)</span></label>
+                    <input id="idNumber" name="idNumber" type="text" maxlength="13" placeholder="13-digit SA ID" class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all" />
+                  </div>
+                </div>
+
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-2">Services Needed <span class="text-red-500">*</span></label>
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-3" id="servicesGroup">
+                    <div class="service-card">
+                      <input type="checkbox" name="services" id="svc1" value="Debt Consolidation" class="sr-only">
+                      <label for="svc1" class="h-full flex flex-col gap-2 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-medium text-slate-700 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
+                        <span class="inline-flex w-10 h-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+                        </span>
+                        <span class="font-semibold">Debt Consolidation</span>
+                        <span class="text-xs text-slate-500 leading-relaxed">Combine multiple debts into one manageable monthly payment.</span>
+                      </label>
+                    </div>
+                    <div class="service-card">
+                      <input type="checkbox" name="services" id="svc2" value="Personal Loans" class="sr-only">
+                      <label for="svc2" class="h-full flex flex-col gap-2 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-medium text-slate-700 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
+                        <span class="inline-flex w-10 h-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </span>
+                        <span class="font-semibold">Personal Loans</span>
+                        <span class="text-xs text-slate-500 leading-relaxed">Explore competitive loan options tailored to your needs.</span>
+                      </label>
+                    </div>
+                    <div class="service-card">
+                      <input type="checkbox" name="services" id="svc3" value="Medical Insurance" class="sr-only">
+                      <label for="svc3" class="h-full flex flex-col gap-2 border border-slate-200 rounded-2xl px-4 py-4 text-sm font-medium text-slate-700 cursor-pointer hover:border-brand-400 hover:bg-blue-50">
+                        <span class="inline-flex w-10 h-10 items-center justify-center rounded-xl bg-brand-100 text-brand-700">
+                          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                        </span>
+                        <span class="font-semibold">Medical Insurance</span>
+                        <span class="text-xs text-slate-500 leading-relaxed">Compare affordable medical cover options from trusted providers.</span>
+                      </label>
+                    </div>
+                  </div>
+                  <p class="text-red-500 text-xs mt-1 hidden" data-error="services">Please select at least one service.</p>
+                </div>
+
+                <div class="mb-5">
+                  <label class="block text-sm font-semibold text-slate-700 mb-1.5" for="message">Additional Notes <span class="text-slate-400 font-normal text-xs">(optional)</span></label>
+                  <textarea id="message" name="message" rows="3" placeholder="Tell us more about your situation or what kind of solution you are looking for…" class="form-input w-full border border-slate-200 rounded-lg px-3.5 py-2.5 text-sm text-slate-800 placeholder-slate-400 transition-all resize-none"></textarea>
+                </div>
+
+                <div class="mb-4 bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5">
+                  <label class="flex gap-3 cursor-pointer">
+                    <input type="checkbox" id="consent" name="consent" required class="custom-checkbox mt-0.5">
+                    <span class="text-xs text-slate-600 leading-relaxed">
+                      <span class="font-semibold text-slate-700">Consent required:</span>
+                      I agree to ClearPath Finance collecting and processing my information in line with POPIA for the purpose of matching me with relevant third-party providers.
+                    </span>
+                  </label>
+                  <p class="text-red-500 text-xs mt-2 hidden ml-7" data-error="consent">You must accept the consent statement to proceed.</p>
+                </div>
+
+                <button type="submit" id="submitBtn" class="cta-btn relative w-full text-white font-bold py-3.5 rounded-xl text-sm tracking-wide shadow-lg shadow-blue-600/30 overflow-hidden">
+                  <span id="btnText" class="relative z-10 flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/></svg>
+                    Start Your Application
+                  </span>
+                  <span id="btnLoading" class="relative z-10 hidden items-center justify-center gap-2">
+                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                    Submitting…
+                  </span>
+                </button>
+
+                <p id="formError" class="text-red-500 text-xs text-center mt-3 hidden"></p>
+
+                <div class="mt-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
+                  <p class="text-xs sm:text-sm text-amber-900 leading-relaxed">
+                    <span class="font-semibold uppercase tracking-wide">Disclaimer (Important):</span>
+                    By submitting your details, you agree to be contacted by one of our trusted partners regarding your request.
+                  </p>
+                </div>
+
+                <p class="text-center text-slate-400 text-xs mt-4">🔒 Your information is encrypted and secure.</p>
+              </form>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Right: Stats grid -->
-      <div class="mt-12 lg:mt-0 grid grid-cols-2 gap-4">
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6">
-          <div class="text-4xl font-bold text-brand-400 mb-1">12k+</div>
-          <div class="text-slate-300 text-sm font-medium">Clients Successfully Matched</div>
+      <div class="wave-divider mt-12 lg:mt-0">
+        <svg viewBox="0 0 1440 60" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" class="w-full h-12 lg:h-16">
+          <path d="M0,30 C360,60 1080,0 1440,30 L1440,60 L0,60 Z" fill="#f8fafc"/>
+        </svg>
+      </div>
+    </section>
+
+    <section id="how-it-works" class="py-20 bg-slate-50">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="inline-block text-brand-600 text-xs font-bold uppercase tracking-widest mb-3">Simple Process</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">How It Works</h2>
+          <p class="text-slate-500 max-w-xl mx-auto">Three easy steps to get matched with the right solution while keeping the process simple on every device.</p>
         </div>
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6">
-          <div class="text-4xl font-bold text-brand-400 mb-1">R2B+</div>
-          <div class="text-slate-300 text-sm font-medium">In Loans Facilitated</div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          <div class="hidden md:block absolute top-10 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-brand-200 via-brand-400 to-brand-200 z-0"></div>
+
+          <div class="relative z-10 bg-white rounded-[1.75rem] p-7 shadow-sm border border-slate-100 hover:shadow-md hover:border-brand-100 transition-all">
+            <div class="w-16 h-16 bg-brand-600 rounded-[1.35rem] flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-lg shadow-brand-600/25">1</div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-3">Complete the Form</h3>
+            <p class="text-slate-500 text-lg leading-relaxed">Fill in your details and select the financial services you need. It takes under 2 minutes.</p>
+          </div>
+
+          <div class="relative z-10 bg-white rounded-[1.75rem] p-7 shadow-sm border border-slate-100 hover:shadow-md hover:border-brand-100 transition-all">
+            <div class="w-16 h-16 bg-brand-600 rounded-[1.35rem] flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-lg shadow-brand-600/25">2</div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-3">We Find Your Match</h3>
+            <p class="text-slate-500 text-lg leading-relaxed">Our team reviews your application and matches you with suitable NCR-registered providers.</p>
+          </div>
+
+          <div class="relative z-10 bg-white rounded-[1.75rem] p-7 shadow-sm border border-slate-100 hover:shadow-md hover:border-brand-100 transition-all">
+            <div class="w-16 h-16 bg-brand-600 rounded-[1.35rem] flex items-center justify-center text-white text-2xl font-bold mb-6 shadow-lg shadow-brand-600/25">3</div>
+            <h3 class="text-2xl font-bold text-slate-800 mb-3">Get Your Solution</h3>
+            <p class="text-slate-500 text-lg leading-relaxed">A consultant contacts you within 48 hours with personalised options — all at no cost to you.</p>
+          </div>
         </div>
-        <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6">
-          <div class="text-4xl font-bold text-brand-400 mb-1">50+</div>
-          <div class="text-slate-300 text-sm font-medium">Registered Provider Partners</div>
+      </div>
+    </section>
+
+    <section id="services" class="py-20 bg-white">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-14">
+          <span class="inline-block text-brand-600 text-xs font-bold uppercase tracking-widest mb-3">Services Section</span>
+          <h2 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-3">Solutions We Help You Compare</h2>
+          <p class="text-slate-500 max-w-2xl mx-auto">We focus on three key financial categories and present them in a clean responsive layout that stays polished across desktop, tablet, and mobile.</p>
         </div>
-        <div class="bg-brand-600 rounded-2xl p-6">
-          <div class="text-4xl font-bold text-white mb-1">4.8★</div>
-          <div class="text-blue-200 text-sm font-medium">Average Client Rating</div>
+
+        <div class="grid gap-6 lg:grid-cols-[1.05fr_0.95fr] items-start">
+          <div class="grid gap-5">
+            <article class="service-card rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6 sm:p-7">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/></svg>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-slate-900 mb-2">Debt Consolidation</h3>
+                  <p class="text-slate-600 leading-relaxed">Combine multiple debts into one manageable monthly payment and reduce financial stress.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="service-card rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6 sm:p-7">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-slate-900 mb-2">Personal Loans</h3>
+                  <p class="text-slate-600 leading-relaxed">Get access to trusted lenders offering competitive loan options tailored to your needs.</p>
+                </div>
+              </div>
+            </article>
+
+            <article class="service-card rounded-[1.75rem] border border-slate-200 bg-slate-50 p-6 sm:p-7">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 rounded-2xl bg-brand-100 text-brand-700 flex items-center justify-center flex-shrink-0">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                </div>
+                <div>
+                  <h3 class="text-2xl font-bold text-slate-900 mb-2">Medical Insurance</h3>
+                  <p class="text-slate-600 leading-relaxed">Compare affordable medical cover options from reliable providers.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+            <figure class="media-card aspect-[4/5] shadow-soft">
+              <img src="assets/images/IMG_3457.JPG" alt="Professional workspace with laptop and coffee illustrating financial application support" loading="lazy" decoding="async" width="4240" height="2832" />
+            </figure>
+            <figure class="media-card aspect-[4/5] shadow-soft">
+              <img src="assets/images/IMG_3461.JPG" alt="Consultation between a financial advisor and a client" loading="lazy" decoding="async" width="3840" height="2160" />
+            </figure>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section id="why-us" class="py-20 bg-slate-900">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] items-center">
+          <div>
+            <span class="inline-block text-brand-400 text-xs font-bold uppercase tracking-widest mb-3">Why Choose Us</span>
+            <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">South Africa's Most Trusted <span class="text-brand-400">Financial Matching Service</span></h2>
+            <p class="text-slate-400 leading-relaxed mb-8 max-w-2xl">We help users compare regulated options while protecting their information and keeping the matching process simple, mobile-friendly, and free to use.</p>
+
+            <div class="space-y-4">
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 bg-green-500/15 border border-green-500/25 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold text-lg">100% Free Service</h4>
+                  <p class="text-slate-400 text-sm mt-1">You never pay us anything to be matched with a suitable provider.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 bg-green-500/15 border border-green-500/25 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold text-lg">POPIA Compliant</h4>
+                  <p class="text-slate-400 text-sm mt-1">We are committed to responsible personal information handling for South African users.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 bg-green-500/15 border border-green-500/25 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold text-lg">No Obligation to Apply</h4>
+                  <p class="text-slate-400 text-sm mt-1">Submitting a request does not lock you into a product or provider.</p>
+                </div>
+              </div>
+              <div class="flex gap-4 items-start">
+                <div class="w-10 h-10 bg-green-500/15 border border-green-500/25 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <svg class="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                </div>
+                <div>
+                  <h4 class="text-white font-semibold text-lg">Trusted Provider Matching</h4>
+                  <p class="text-slate-400 text-sm mt-1">We connect users with third-party providers aligned to their request.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="bg-slate-800 border border-slate-700 rounded-[1.75rem] p-6">
+              <div class="text-4xl font-bold text-brand-400 mb-2">12,000+</div>
+              <div class="text-slate-200 text-base font-medium">Clients Assisted</div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-[1.75rem] p-6">
+              <div class="text-4xl font-bold text-brand-400 mb-2">48 Hours</div>
+              <div class="text-slate-200 text-base font-medium">Average Response Time</div>
+            </div>
+            <div class="bg-slate-800 border border-slate-700 rounded-[1.75rem] p-6">
+              <div class="text-4xl font-bold text-brand-400 mb-2">100% Free</div>
+              <div class="text-slate-200 text-base font-medium">No Hidden Fees</div>
+            </div>
+            <figure class="media-card aspect-[4/3] border border-slate-700 shadow-soft">
+              <img src="assets/images/IMG_3458.JPG" alt="Team collaboration session for financial guidance and support" loading="lazy" decoding="async" width="6720" height="4480" />
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-20 bg-white">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="rounded-[2rem] bg-gradient-to-br from-brand-700 via-brand-600 to-blue-500 px-6 py-10 sm:px-10 sm:py-12 text-center shadow-2xl shadow-blue-900/15">
+          <p class="text-blue-100 text-sm sm:text-base font-semibold uppercase tracking-[0.2em] mb-3">Final CTA</p>
+          <h2 class="text-3xl sm:text-4xl font-bold text-white mb-4">Ready to take control of your finances?</h2>
+          <p class="text-blue-50 text-lg max-w-2xl mx-auto leading-relaxed mb-8">Apply now and get matched with the right solution today.</p>
+          <a href="#apply" class="inline-flex items-center justify-center rounded-xl bg-white px-6 py-3.5 text-brand-700 font-bold shadow-lg hover:bg-blue-50 transition-colors">Start Your Application</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-950 py-12">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="text-white font-bold text-xl">ClearPath<span class="text-brand-400">Finance</span></span>
+          </div>
+          <p class="text-slate-400 text-sm max-w-2xl">We help South Africans compare trusted debt consolidation, loan, and financial solutions through a secure online matching experience.</p>
+          <div class="flex flex-wrap gap-x-5 gap-y-2 mt-4 text-sm text-blue-200">
+            <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+            <a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a>
+            <a href="legal.html" class="hover:text-white transition-colors">Legal</a>
+          </div>
+        </div>
+        <div class="text-slate-500 text-sm md:text-right">
+          <p>© 2026 ClearPath Finance. All rights reserved.</p>
+          <p class="mt-2">NCR-Registered Partners · POPIA Compliant · No Obligation</p>
+        </div>
+      </div>
+
+      <div class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/60 px-5 py-4">
+        <p class="text-sm text-slate-300 leading-relaxed">
+          <span class="font-semibold uppercase tracking-wide text-white">Disclosure (Important):</span>
+          ClearPath Finance is not a lender or financial service provider. We connect users with third-party providers.
+        </p>
       </div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<!-- ════════════════════════════════
-     FOOTER
-════════════════════════════════ -->
-<footer class="bg-slate-950 py-10">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="text-white font-bold text-lg">FinConnect<span class="text-brand-400">SA</span></span>
-        </div>
-        <p class="text-slate-500 text-xs">Connecting South Africans with trusted financial solutions.</p>
-      </div>
-      <div class="text-slate-500 text-xs text-center md:text-right">
-        <p>© 2025 FinConnectSA. All rights reserved.</p>
-        <p class="mt-1">POPIA Compliant · NCR Partner Network · NCA Regulated</p>
-        <p class="mt-1">FinConnectSA is a lead generation and matching service, not a registered financial services provider.</p>
-      </div>
-    </div>
-  </div>
-</footer>
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec';
 
-<!-- ════════════════════════════════
-     FORM SUBMISSION SCRIPT
-════════════════════════════════ -->
-<script>
-  // ⚠️  IMPORTANT: Replace this URL with your deployed Google Apps Script Web App URL
-  // After deploying your Apps Script, paste the URL here:
-  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec';
+    const form = document.getElementById('leadForm');
+    const successMsg = document.getElementById('successMsg');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnLoading = document.getElementById('btnLoading');
+    const formError = document.getElementById('formError');
 
-  const form = document.getElementById('leadForm');
-  const successMsg = document.getElementById('successMsg');
-  const submitBtn = document.getElementById('submitBtn');
-  const btnText = document.getElementById('btnText');
-  const btnLoading = document.getElementById('btnLoading');
-  const formError = document.getElementById('formError');
-
-  // ── Validation helpers ──
-  function showError(field, show) {
-    const el = document.querySelector(`[data-error="${field}"]`);
-    if (el) el.classList.toggle('hidden', !show);
-  }
-
-  function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  function validatePhone(phone) {
-    // Accept SA phone formats: 0XX XXXXXXX or +27XX XXXXXXX
-    return /^(\+27|0)[0-9]{9}$/.test(phone.replace(/\s/g, ''));
-  }
-
-  // ── Form submit ──
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    let valid = true;
-
-    // Full Name
-    const fullName = document.getElementById('fullName').value.trim();
-    if (!fullName) { showError('fullName', true); valid = false; } else { showError('fullName', false); }
-
-    // Email
-    const email = document.getElementById('email').value.trim();
-    if (!validateEmail(email)) { showError('email', true); valid = false; } else { showError('email', false); }
-
-    // Phone
-    const phone = document.getElementById('phone').value.trim();
-    if (!validatePhone(phone)) { showError('phone', true); valid = false; } else { showError('phone', false); }
-
-    // Province
-    const province = document.getElementById('province').value;
-    if (!province) { showError('province', true); valid = false; } else { showError('province', false); }
-
-    // Services (at least one)
-    const serviceChecks = [...document.querySelectorAll('input[name="services"]:checked')];
-    const services = serviceChecks.map(c => c.value).join(', ');
-    if (serviceChecks.length === 0) { showError('services', true); valid = false; } else { showError('services', false); }
-
-    // POPIA consent
-    const consent = document.getElementById('consent').checked;
-    if (!consent) { showError('consent', true); valid = false; } else { showError('consent', false); }
-
-    if (!valid) {
-      formError.textContent = 'Please fix the errors above and try again.';
-      formError.classList.remove('hidden');
-      return;
+    function showError(field, show) {
+      const el = document.querySelector(`[data-error="${field}"]`);
+      if (el) el.classList.toggle('hidden', !show);
     }
 
-    formError.classList.add('hidden');
-
-    // Build payload
-    const payload = {
-      fullName,
-      email,
-      phone,
-      idNumber: document.getElementById('idNumber').value.trim(),
-      province,
-      services,
-      message: document.getElementById('message').value.trim(),
-      consent: consent ? 'Yes' : 'No',
-    };
-
-    // Show loading state
-    btnText.classList.add('hidden');
-    btnLoading.classList.remove('hidden');
-    btnLoading.classList.add('flex');
-    submitBtn.disabled = true;
-
-    try {
-      // Send to Google Apps Script via no-cors (to avoid CORS preflight issues)
-      await fetch(APPS_SCRIPT_URL, {
-        method: 'POST',
-        mode: 'no-cors', // Google Apps Script doesn't support CORS preflight on POST
-        headers: { 'Content-Type': 'text/plain' },
-        body: JSON.stringify(payload),
-      });
-
-      // Show success (we can't read the response body in no-cors mode,
-      // but if we got here without throwing, the request was sent)
-      form.style.display = 'none';
-      successMsg.style.display = 'block';
-
-    } catch (err) {
-      console.error('Submission error:', err);
-      formError.textContent = 'Something went wrong. Please try again or call us directly.';
-      formError.classList.remove('hidden');
-
-      btnText.classList.remove('hidden');
-      btnLoading.classList.add('hidden');
-      btnLoading.classList.remove('flex');
-      submitBtn.disabled = false;
+    function validateEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
-  });
 
-  // ── Smooth scroll for nav links ──
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', (e) => {
-      const target = document.querySelector(a.getAttribute('href'));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    function validatePhone(phone) {
+      return /^(\+27|0)[0-9]{9}$/.test(phone.replace(/\s/g, ''));
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      let valid = true;
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const province = document.getElementById('province').value;
+      const consent = document.getElementById('consent').checked;
+      const serviceChecks = [...document.querySelectorAll('input[name="services"]:checked')];
+      const services = serviceChecks.map((c) => c.value).join(', ');
+
+      if (!fullName) { showError('fullName', true); valid = false; } else { showError('fullName', false); }
+      if (!validateEmail(email)) { showError('email', true); valid = false; } else { showError('email', false); }
+      if (!validatePhone(phone)) { showError('phone', true); valid = false; } else { showError('phone', false); }
+      if (!province) { showError('province', true); valid = false; } else { showError('province', false); }
+      if (serviceChecks.length === 0) { showError('services', true); valid = false; } else { showError('services', false); }
+      if (!consent) { showError('consent', true); valid = false; } else { showError('consent', false); }
+
+      if (!valid) {
+        formError.textContent = 'Please fix the errors above and try again.';
+        formError.classList.remove('hidden');
+        return;
+      }
+
+      formError.classList.add('hidden');
+
+      const payload = {
+        fullName,
+        email,
+        phone,
+        idNumber: document.getElementById('idNumber').value.trim(),
+        province,
+        services,
+        message: document.getElementById('message').value.trim(),
+        consent: consent ? 'Yes' : 'No',
+      };
+
+      btnText.classList.add('hidden');
+      btnLoading.classList.remove('hidden');
+      btnLoading.classList.add('flex');
+      submitBtn.disabled = true;
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(payload),
+        });
+
+        form.style.display = 'none';
+        successMsg.style.display = 'block';
+      } catch (err) {
+        console.error('Submission error:', err);
+        formError.textContent = 'Something went wrong. Please try again later.';
+        formError.classList.remove('hidden');
+        btnText.classList.remove('hidden');
+        btnLoading.classList.add('hidden');
+        btnLoading.classList.remove('flex');
+        submitBtn.disabled = false;
       }
     });
-  });
-</script>
+  </script>
 </body>
 </html>
