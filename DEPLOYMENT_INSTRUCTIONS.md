@@ -1,141 +1,275 @@
-# FinConnectSA – Deployment Instructions
-## Complete Step-by-Step Guide
+# FinConnectSA – Supabase + Resend + cPanel Setup Guide
+
+This project is now structured for a **static front end hosted on cPanel** with a **Supabase backend**, **Edge Functions** for public lead intake, and **Resend** for email verification.
 
 ---
 
-## STEP 1 — Set Up Your Google Sheet
+## 1. What this stack does
 
-1. Go to [https://sheets.google.com](https://sheets.google.com)
-2. Click **"+ Blank spreadsheet"**
-3. Name it **"FinConnectSA Leads"** (click the title at the top)
-4. The Apps Script will auto-create the header row for you (see Step 2)
-5. Note your spreadsheet URL — you'll need it in Step 2
+### Public website (`index.html`)
+- Collects lead enquiries.
+- Sends the form to a Supabase Edge Function named `lead-submit`.
+- Triggers a verification email to the client.
+- Lets the client confirm their email using a verification link.
 
----
+### Admin dashboard (`admin.html`)
+- Uses **Supabase Auth** instead of a visible client-side password.
+- Only allows verified users with `app_metadata.role = admin`.
+- Reads, filters, updates, deletes, and exports lead records.
 
-## STEP 2 — Deploy the Google Apps Script
-
-1. Inside your Google Sheet, click **Extensions → Apps Script**
-2. A new tab opens with the script editor
-3. **Delete all existing code** in the editor
-4. Open `google-apps-script.js` and **copy everything**
-5. **Paste** it into the Apps Script editor
-6. Click **"Save project"** (floppy disk icon or Ctrl+S)
-7. Click **"Deploy"** (top right) → **"New deployment"**
-8. Click the gear icon next to "Type" and select **"Web app"**
-9. Fill in:
-   - **Description:** `FinConnectSA Lead Form v1`
-   - **Execute as:** `Me (your.email@gmail.com)`
-   - **Who has access:** `Anyone`
-10. Click **"Deploy"**
-11. Google will ask you to **authorise** the app:
-    - Click "Authorise access"
-    - Choose your Google account
-    - Click "Advanced" → "Go to FinConnectSA (unsafe)" *(this is normal for your own scripts)*
-    - Click "Allow"
-12. **Copy the Web app URL** — it looks like:
-    `https://script.google.com/macros/s/AKfycby.../exec`
+### Supabase database
+- Stores leads in the `public.leads` table.
+- Uses Row Level Security so only admins can read or manage leads.
 
 ---
 
-## STEP 3 — Add Your URL to the HTML Files
+## 2. Files you need to configure
 
-### In `index.html`:
-Find this line (near the bottom in the `<script>` tag):
-```javascript
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID_HERE/exec';
+| File | Purpose |
+|------|---------|
+| `config.js` | Front-end environment values for Supabase and your site URL |
+| `supabase/migrations/20260322_finconnect_setup.sql` | Lead table + RLS policies |
+| `supabase/functions/lead-submit/index.ts` | Public lead intake + Resend verification email |
+| `supabase/functions/lead-verify/index.ts` | Email verification endpoint |
+| `index.html` | Public form |
+| `admin.html` | Secure admin dashboard |
+
+---
+
+## 3. Create your Supabase project
+
+1. Log into Supabase.
+2. Create a new project.
+3. Wait for the database and API services to finish provisioning.
+4. Copy these values from **Project Settings → API**:
+   - `Project URL`
+   - `anon public key`
+   - `service_role key` *(Edge Function secret only — never place this in `config.js`)*
+
+---
+
+## 4. Run the database migration
+
+Use the SQL in:
+
+- `supabase/migrations/20260322_finconnect_setup.sql`
+
+### Option A — Supabase SQL Editor
+1. Open **SQL Editor** in Supabase.
+2. Paste the migration contents.
+3. Run the script.
+
+### Option B — Supabase CLI
+```bash
+supabase db push
 ```
-Replace it with your actual URL:
-```javascript
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby.../exec';
+
+This creates:
+- `public.leads`
+- indexes for filtering/reporting
+- an `updated_at` trigger
+- RLS policies for authenticated admin users only
+
+---
+
+## 5. Deploy the Edge Functions
+
+This project includes two functions:
+
+- `lead-submit`
+- `lead-verify`
+
+### Required function secrets
+Set these in Supabase:
+
+```bash
+supabase secrets set \
+  SUPABASE_URL="https://YOUR_PROJECT.supabase.co" \
+  SUPABASE_SERVICE_ROLE_KEY="YOUR_SERVICE_ROLE_KEY" \
+  RESEND_API_KEY="re_xxxxxxxxx" \
+  RESEND_FROM_EMAIL="FinConnect SA <verify@yourdomain.com>"
 ```
 
-### In `admin.html`:
-Find the same line in the configuration section and replace it with the same URL.
-
----
-
-## STEP 4 — Test Your Setup
-
-### Test the public form:
-1. Open `index.html` in a browser (double-click the file)
-2. Fill in all required fields
-3. Click "Submit My Application"
-4. You should see the green success message
-5. Open your Google Sheet — the new row should appear within seconds
-
-### Test the admin panel:
-1. Open `admin.html` in a browser
-2. Enter password: `Admin2026`
-3. You should see the dashboard with your test lead
-4. Try the search, filters, status update, and export buttons
-
-### Verify Apps Script is working:
-1. Go back to Apps Script editor
-2. Select the function `testWrite` from the dropdown
-3. Click the ▶ Run button
-4. In the "Execution log" you should see "✅ Sheet is accessible."
-
----
-
-## STEP 5 — Deploy to the Web (Free Hosting)
-
-### Option A: Netlify (Recommended — easiest)
-1. Go to [https://app.netlify.com](https://app.netlify.com) and sign up free
-2. Click **"Add new site"** → **"Deploy manually"**
-3. Drag and drop your project folder (containing `index.html` and `admin.html`) onto the upload area
-4. Wait ~30 seconds
-5. Netlify gives you a URL like `https://random-name.netlify.app`
-6. Optional: Go to **Site settings → Domain management** to set a custom domain
-7. To update: simply drag-and-drop again
-
-### Option B: Vercel
-1. Go to [https://vercel.com](https://vercel.com) and sign up free
-2. Install Vercel CLI: `npm i -g vercel`
-3. In your project folder, run: `vercel`
-4. Follow the prompts (Framework: Other, Root: ./)
-5. Your site is live at `https://your-project.vercel.app`
-
-### Option C: GitHub Pages (also free)
-1. Create a free account at [https://github.com](https://github.com)
-2. Create a new repository (public)
-3. Upload `index.html` and `admin.html` to the repository
-4. Go to **Settings → Pages → Source → Deploy from branch → main**
-5. Your site is live at `https://yourusername.github.io/repo-name`
-
----
-
-## STEP 6 — Change the Admin Password
-
-Open `admin.html` and find this line near the top of the `<script>` section:
-```javascript
-const ADMIN_PASSWORD = 'Admin2026';
+### Deploy the functions
+```bash
+supabase functions deploy lead-submit
+supabase functions deploy lead-verify
 ```
-Change `Admin2026` to your own secure password.
-
-> ⚠️ **Important:** This is a client-side password and is visible in the page source.
-> See the "Security Notes" file for how to make this more secure.
 
 ---
 
-## STEP 7 — Re-deploying After Changes
+## 6. Configure Resend
 
-If you change the Apps Script code and need to redeploy:
-1. Go to Apps Script editor
-2. Click **Deploy → Manage deployments**
-3. Click the pencil ✏️ icon next to your deployment
-4. Change version to **"New version"**
-5. Click **"Deploy"**
-6. The URL stays the same — no changes needed in your HTML files
+1. Create a Resend account.
+2. Verify the sending domain you want to use.
+3. Create the sender address used in `RESEND_FROM_EMAIL`.
+4. Copy your Resend API key.
+5. Store it in Supabase secrets as `RESEND_API_KEY`.
+
+### Optional: use Resend SMTP for Supabase Auth emails too
+If you want admin verification emails from Supabase Auth to also use Resend:
+1. Open **Supabase → Authentication → SMTP Settings**.
+2. Enable custom SMTP.
+3. Paste your Resend SMTP credentials.
+4. Save.
+
+That way:
+- lead verification emails come from your Edge Function + Resend API
+- admin user confirmation emails come from Supabase Auth via Resend SMTP
 
 ---
 
-## Troubleshooting
+## 7. Create your first admin user
 
-| Problem | Solution |
-|---------|----------|
-| Form submits but no row appears in sheet | Check your APPS_SCRIPT_URL is correct. Check Google Sheet permissions. |
-| Admin panel shows "Failed to load leads" | Ensure the Apps Script is deployed with "Anyone" access. Try opening the URL directly in your browser — it should return JSON. |
-| Export to Excel button does nothing | Check browser console for errors. Ensure SheetJS CDN loaded. |
-| "Redirect URI mismatch" error | Redeploy the Apps Script as a new version. |
-| CORS error in browser console | This is expected for POST in no-cors mode. The data still sends. For GET requests, if you see a CORS error, redeploy the script. |
+The admin dashboard requires:
+- a valid Supabase Auth account
+- email confirmation completed
+- `app_metadata.role = admin`
+
+### Recommended flow
+1. In Supabase, go to **Authentication → Users**.
+2. Create a user for your admin email.
+3. Ensure the user confirms their email address.
+4. Set their role to admin.
+
+### Example SQL to set admin metadata
+Replace the email address first:
+
+```sql
+update auth.users
+set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'::jsonb
+where email = 'admin@yourdomain.com';
+```
+
+After this, the user can sign into `admin.html`.
+
+---
+
+## 8. Update `config.js`
+
+Open `config.js` and replace the placeholders:
+
+```javascript
+window.FINCONNECT_CONFIG = {
+  siteUrl: 'https://your-domain.example.com',
+  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
+  supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY',
+  edgeFunctionBase: 'https://YOUR_PROJECT.supabase.co/functions/v1',
+  leadSubmitFunction: 'lead-submit',
+  leadVerifyFunction: 'lead-verify',
+  leadsTable: 'leads'
+};
+```
+
+### Important notes
+- `siteUrl` must match the live public URL.
+- `supabaseAnonKey` is safe for the browser.
+- Do **not** place the service role key in any public file.
+
+---
+
+## 9. Upload to cPanel
+
+Because this site is static, cPanel hosting is simple.
+
+### Public site deployment
+Upload these files/folders to your web root (`public_html` or your chosen folder):
+- `index.html`
+- `admin.html`
+- `config.js`
+- `assets/`
+
+### Recommended structure
+```text
+public_html/
+  index.html
+  admin.html
+  config.js
+  assets/
+```
+
+### cPanel checklist
+- Ensure `config.js` is uploaded alongside the HTML files.
+- Keep file names exactly as committed.
+- If using a subfolder, update `siteUrl` accordingly.
+- Test both pages using the final live URL, not only local files.
+
+---
+
+## 10. Test the production flow
+
+### Public lead test
+1. Open the live `index.html` page.
+2. Submit a test enquiry.
+3. Confirm the success message appears.
+4. Check the inbox of the email used in the form.
+5. Click the verification link.
+6. Re-open the admin panel and confirm the lead shows as **Verified**.
+
+### Admin test
+1. Open `admin.html`.
+2. Sign in with your confirmed admin account.
+3. Confirm leads load successfully.
+4. Test:
+   - search
+   - province filter
+   - service filter
+   - status updates
+   - delete action
+   - Excel export
+
+---
+
+## 11. Recommended Supabase settings
+
+### Authentication URL settings
+In **Supabase → Authentication → URL Configuration**:
+- set your **Site URL** to the live public domain
+- add your production URL to **Redirect URLs**
+- add any staging domain if you use one
+
+### RLS best practice
+Keep `public.leads` locked down with RLS.
+Do not add an `INSERT` policy for `anon` if you are using the supplied Edge Function, because the Edge Function already inserts with the service role key.
+
+---
+
+## 12. Operational recommendations before launch
+
+- Use a real domain email address for Resend.
+- Add a Privacy Policy page.
+- Add Terms of Use if you route leads to third-party providers.
+- Review POPIA wording with your compliance contact.
+- Enable CAPTCHA later if spam becomes an issue.
+- Back up your database periodically.
+- Create at least two admin accounts so you are not locked out.
+
+---
+
+## 13. Troubleshooting
+
+| Problem | Likely cause | Fix |
+|--------|--------------|-----|
+| Public form says config is missing | `config.js` still contains placeholders | Replace the values and re-upload |
+| Form submits but no email arrives | Resend domain/API issue | Verify domain, sender, and `RESEND_API_KEY` |
+| Email link opens but verification fails | Wrong `siteUrl` or token issue | Confirm `siteUrl` and function deployment |
+| Admin login fails with “email not confirmed” | User has not verified their auth email | Confirm the email from Supabase Auth |
+| Admin login works but no data loads | Missing admin role or RLS issue | Set `app_metadata.role = admin` |
+| CORS errors from functions | Function not deployed or wrong base URL | Check function deploy status and `edgeFunctionBase` |
+
+---
+
+## 14. Launch checklist
+
+- [ ] Migration executed successfully
+- [ ] Functions deployed
+- [ ] Secrets added
+- [ ] Resend sender verified
+- [ ] Admin user created and confirmed
+- [ ] Admin role set
+- [ ] `config.js` updated
+- [ ] Files uploaded to cPanel
+- [ ] Public form tested
+- [ ] Verification email tested
+- [ ] Admin dashboard tested
+
