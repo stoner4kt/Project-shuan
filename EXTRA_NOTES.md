@@ -8,7 +8,7 @@ The site now uses the following palette derived from your reference image:
 - `#2E3944`
 - `#124E66`
 - `#748D92`
-- `#D3D9D4`
+- `#D3D9D4`.
 
 These values are defined in the Tailwind config blocks inside both `index.html` and `admin.html`.
 
