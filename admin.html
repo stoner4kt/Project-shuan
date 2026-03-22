@@ -73,7 +73,7 @@
           </svg>
         </div>
         <h1 class="text-3xl font-bold text-brand-800">Admin Panel</h1>
-        <p class="mt-2 text-sm leading-relaxed text-brand-600">Secure access for authorized team members to review, track, and manage client enquiries.</p>
+        <p class="mt-2 text-sm leading-relaxed text-brand-600">Secure access now uses Supabase Auth. Only verified admin users with the correct role can manage leads.</p>
       </div>
 
       <div class="space-y-4">
@@ -91,13 +91,13 @@
       </div>
 
       <p id="loginError" class="mt-4 hidden rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-600"></p>
-      <p class="mt-6 text-center text-xs text-brand-500">Use your approved admin credentials to access the lead management dashboard.</p>
+      <p class="mt-6 text-center text-xs text-brand-500">Use an admin account created in Supabase Auth and confirm the verification email before signing in.</p>
     </div>
   </div>
 
   <div id="dashboard" class="hidden min-h-screen">
     <nav class="sticky top-0 z-50 border-b border-brand-100 bg-white/95 backdrop-blur">
-      <div class="max-w-screen-xl mx-auto flex flex-col gap-3 px-4 py-3 sm:px-6 lg:px-8 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:py-0">
+      <div class="max-w-screen-xl mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         <div class="flex items-center gap-3">
           <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-brand-600 text-white shadow">
             <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"/><path fill-rule="evenodd" d="M18 9H2v5a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm5-1a1 1 0 100 2h1a1 1 0 100-2H9z" clip-rule="evenodd"/></svg>
@@ -107,7 +107,7 @@
             <div id="adminIdentity" class="text-xs text-brand-500">Signed in securely</div>
           </div>
         </div>
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+        <div class="flex items-center gap-2 sm:gap-3">
           <button onclick="loadLeads()" class="inline-flex items-center gap-2 rounded-full border border-brand-100 px-4 py-2 text-sm font-medium text-brand-600 transition-colors hover:bg-brand-50">
             <svg id="refreshIcon" class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
             Refresh
@@ -211,7 +211,7 @@
                 <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500">Province</th>
                 <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500">Services</th>
                 <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500">Message</th>
-                <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500" >Confirmation</th>
+                <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500">Email verification</th>
                 <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500">Status</th>
                 <th class="px-4 py-3 text-left text-xs font-bold uppercase tracking-[0.22em] text-brand-500">Actions</th>
               </tr>
@@ -221,7 +221,7 @@
         </div>
       </section>
 
-      <p class="mt-6 text-center text-xs text-brand-500">Lead management dashboard for reviewing, updating, and exporting client enquiries.</p>
+      <p class="mt-6 text-center text-xs text-brand-500">Static admin shell · Supabase Auth session · RLS-protected database access · Built for deployment alongside your cPanel-hosted public site</p>
     </main>
   </div>
 
@@ -271,14 +271,14 @@
     function getLoginErrorMessage(error) {
       if (!error) return 'Unable to sign in.';
       if (error.message?.toLowerCase().includes('email not confirmed')) {
-        return 'This account is not active yet. Please contact your administrator for access.';
+        return 'This admin account has not confirmed its email yet. Check the verification email sent through Resend / your configured SMTP provider.';
       }
       return error.message;
     }
 
     async function ensureSession() {
       if (!isConfigured()) {
-        document.getElementById('loginError').textContent = 'The admin portal is temporarily unavailable.';
+        document.getElementById('loginError').textContent = 'Add your Supabase project values to config.js before using the admin panel.';
         document.getElementById('loginError').classList.remove('hidden');
         return;
       }
@@ -296,7 +296,7 @@
       const role = session.user?.app_metadata?.role;
       if (role !== 'admin') {
         await supabase.auth.signOut();
-        document.getElementById('loginError').textContent = 'This account does not have access to the admin portal.';
+        document.getElementById('loginError').textContent = 'This account is signed in but does not have the admin role.';
         document.getElementById('loginError').classList.remove('hidden');
         return;
       }
@@ -319,7 +319,7 @@
       loginError.classList.add('hidden');
 
       if (!isConfigured()) {
-        loginError.textContent = 'The admin portal is temporarily unavailable.';
+        loginError.textContent = 'Add your Supabase project values to config.js before using the admin panel.';
         loginError.classList.remove('hidden');
         return;
       }
@@ -341,7 +341,7 @@
         const role = data.user?.app_metadata?.role;
         if (role !== 'admin') {
           await supabase.auth.signOut();
-          throw new Error('This account does not have permission to access the admin portal.');
+          throw new Error('This account is authenticated but is missing the admin role. Set app_metadata.role to "admin" in Supabase.');
         }
 
         activeUser = data.user;
@@ -367,7 +367,7 @@
       setTableState('loading');
 
       try {
-        if (!supabase) throw new Error('The admin portal is temporarily unavailable.');
+        if (!supabase) throw new Error('Supabase is not configured.');
 
         const { data, error } = await supabase
           .from(LEADS_TABLE)
