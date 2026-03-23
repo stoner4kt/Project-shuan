@@ -1,275 +1,165 @@
-# FinConnectSA – Supabase + Resend + cPanel Setup Guide
+# HTML + Google Apps Script Setup Guide
 
-This project is now structured for a **static front end hosted on cPanel** with a **Supabase backend**, **Edge Functions** for public lead intake, and **Resend** for email verification.
+This repo is now a static HTML site that submits the inquiry form directly to a Google Apps Script Web App.
 
----
+## 1. Files you need for deployment
+Upload these items to your web host / cPanel public web root:
 
-## 1. What this stack does
-
-### Public website (`index.html`)
-- Collects lead enquiries.
-- Sends the form to a Supabase Edge Function named `lead-submit`.
-- Triggers a verification email to the client.
-- Lets the client confirm their email using a verification link.
-
-### Admin dashboard (`admin.html`)
-- Uses **Supabase Auth** instead of a visible client-side password.
-- Only allows verified users with `app_metadata.role = admin`.
-- Reads, filters, updates, deletes, and exports lead records.
-
-### Supabase database
-- Stores leads in the `public.leads` table.
-- Uses Row Level Security so only admins can read or manage leads.
-
----
-
-## 2. Files you need to configure
-
-| File | Purpose |
-|------|---------|
-| `config.js` | Front-end environment values for Supabase and your site URL |
-| `supabase/migrations/20260322_finconnect_setup.sql` | Lead table + RLS policies |
-| `supabase/functions/lead-submit/index.ts` | Public lead intake + Resend verification email |
-| `supabase/functions/lead-verify/index.ts` | Email verification endpoint |
-| `index.html` | Public form |
-| `admin.html` | Secure admin dashboard |
-
----
-
-## 3. Create your Supabase project
-
-1. Log into Supabase.
-2. Create a new project.
-3. Wait for the database and API services to finish provisioning.
-4. Copy these values from **Project Settings → API**:
-   - `Project URL`
-   - `anon public key`
-   - `service_role key` *(Edge Function secret only — never place this in `config.js`)*
-
----
-
-## 4. Run the database migration
-
-Use the SQL in:
-
-- `supabase/migrations/20260322_finconnect_setup.sql`
-
-### Option A — Supabase SQL Editor
-1. Open **SQL Editor** in Supabase.
-2. Paste the migration contents.
-3. Run the script.
-
-### Option B — Supabase CLI
-```bash
-supabase db push
-```
-
-This creates:
-- `public.leads`
-- indexes for filtering/reporting
-- an `updated_at` trigger
-- RLS policies for authenticated admin users only
-
----
-
-## 5. Deploy the Edge Functions
-
-This project includes two functions:
-
-- `lead-submit`
-- `lead-verify`
-
-### Required function secrets
-Set these in Supabase:
-
-```bash
-supabase secrets set \
-  SUPABASE_URL="https://YOUR_PROJECT.supabase.co" \
-  SUPABASE_SERVICE_ROLE_KEY="YOUR_SERVICE_ROLE_KEY" \
-  RESEND_API_KEY="re_xxxxxxxxx" \
-  RESEND_FROM_EMAIL="FinConnect SA <verify@yourdomain.com>"
-```
-
-### Deploy the functions
-```bash
-supabase functions deploy lead-submit
-supabase functions deploy lead-verify
-```
-
----
-
-## 6. Configure Resend
-
-1. Create a Resend account.
-2. Verify the sending domain you want to use.
-3. Create the sender address used in `RESEND_FROM_EMAIL`.
-4. Copy your Resend API key.
-5. Store it in Supabase secrets as `RESEND_API_KEY`.
-
-### Optional: use Resend SMTP for Supabase Auth emails too
-If you want admin verification emails from Supabase Auth to also use Resend:
-1. Open **Supabase → Authentication → SMTP Settings**.
-2. Enable custom SMTP.
-3. Paste your Resend SMTP credentials.
-4. Save.
-
-That way:
-- lead verification emails come from your Edge Function + Resend API
-- admin user confirmation emails come from Supabase Auth via Resend SMTP
-
----
-
-## 7. Create your first admin user
-
-The admin dashboard requires:
-- a valid Supabase Auth account
-- email confirmation completed
-- `app_metadata.role = admin`
-
-### Recommended flow
-1. In Supabase, go to **Authentication → Users**.
-2. Create a user for your admin email.
-3. Ensure the user confirms their email address.
-4. Set their role to admin.
-
-### Example SQL to set admin metadata
-Replace the email address first:
-
-```sql
-update auth.users
-set raw_app_meta_data = coalesce(raw_app_meta_data, '{}'::jsonb) || '{"role":"admin"}'::jsonb
-where email = 'admin@yourdomain.com';
-```
-
-After this, the user can sign into `admin.html`.
-
----
-
-## 8. Update `config.js`
-
-Open `config.js` and replace the placeholders:
-
-```javascript
-window.FINCONNECT_CONFIG = {
-  siteUrl: 'https://your-domain.example.com',
-  supabaseUrl: 'https://YOUR_PROJECT.supabase.co',
-  supabaseAnonKey: 'YOUR_SUPABASE_ANON_KEY',
-  edgeFunctionBase: 'https://YOUR_PROJECT.supabase.co/functions/v1',
-  leadSubmitFunction: 'lead-submit',
-  leadVerifyFunction: 'lead-verify',
-  leadsTable: 'leads'
-};
-```
-
-### Important notes
-- `siteUrl` must match the live public URL.
-- `supabaseAnonKey` is safe for the browser.
-- Do **not** place the service role key in any public file.
-
----
-
-## 9. Upload to cPanel
-
-Because this site is static, cPanel hosting is simple.
-
-### Public site deployment
-Upload these files/folders to your web root (`public_html` or your chosen folder):
 - `index.html`
-- `admin.html`
-- `config.js`
+- `privacy.html`
+- `terms.html`
+- `legal.html`
 - `assets/`
 
-### Recommended structure
-```text
-public_html/
-  index.html
-  admin.html
-  config.js
-  assets/
+## 2. Front-end placeholder to replace
+Open `index.html` and find:
+
+```js
+const APPS_SCRIPT_URL = '{{APPS_SCRIPT_URL}}';
 ```
 
-### cPanel checklist
-- Ensure `config.js` is uploaded alongside the HTML files.
-- Keep file names exactly as committed.
-- If using a subfolder, update `siteUrl` accordingly.
-- Test both pages using the final live URL, not only local files.
+Replace it with your deployed Apps Script Web App URL, for example:
 
----
+```js
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec';
+```
 
-## 10. Test the production flow
+## 3. What the website sends to Apps Script
+### Submit request
+The form sends a JSON `POST` body like this:
 
-### Public lead test
-1. Open the live `index.html` page.
-2. Submit a test enquiry.
-3. Confirm the success message appears.
-4. Check the inbox of the email used in the form.
-5. Click the verification link.
-6. Re-open the admin panel and confirm the lead shows as **Verified**.
+```json
+{
+  "action": "submit",
+  "name": "Thabo Nkosi",
+  "email": "you@email.com",
+  "phone": "0821234567",
+  "province": "Western Cape",
+  "services": ["Debt Consolidation", "Personal Loans"],
+  "message": "Optional message",
+  "consent": true,
+  "source": "https://your-domain.example.com/"
+}
+```
 
-### Admin test
-1. Open `admin.html`.
-2. Sign in with your confirmed admin account.
-3. Confirm leads load successfully.
-4. Test:
-   - search
-   - province filter
-   - service filter
-   - status updates
-   - delete action
-   - Excel export
+Expected success response:
 
----
+```json
+{
+  "status": "verification_sent",
+  "reference": "abc123"
+}
+```
 
-## 11. Recommended Supabase settings
+### Verify request
+After submit, the page sends another JSON `POST` body:
 
-### Authentication URL settings
-In **Supabase → Authentication → URL Configuration**:
-- set your **Site URL** to the live public domain
-- add your production URL to **Redirect URLs**
-- add any staging domain if you use one
+```json
+{
+  "action": "verify",
+  "email": "you@email.com",
+  "code": "123456",
+  "reference": "abc123",
+  "source": "https://your-domain.example.com/"
+}
+```
 
-### RLS best practice
-Keep `public.leads` locked down with RLS.
-Do not add an `INSERT` policy for `anon` if you are using the supplied Edge Function, because the Edge Function already inserts with the service role key.
+Expected success response:
 
----
+```json
+{
+  "status": "verified",
+  "success": true
+}
+```
 
-## 12. Operational recommendations before launch
+### Optional rate-limit response
+If you want Apps Script to throttle attempts, return:
 
-- Use a real domain email address for Resend.
-- Add a Privacy Policy page.
-- Add Terms of Use if you route leads to third-party providers.
-- Review POPIA wording with your compliance contact.
-- Enable CAPTCHA later if spam becomes an issue.
-- Back up your database periodically.
-- Create at least two admin accounts so you are not locked out.
+```json
+{
+  "status": "rate_limited",
+  "message": "Please wait before trying again."
+}
+```
 
----
+## 4. Apps Script project setup
+1. Go to [script.google.com](https://script.google.com/).
+2. Create a new Apps Script project.
+3. Add a script file such as `Code.gs`.
+4. Paste your server logic.
+5. Deploy it as a **Web App**.
+6. Set access so the website can send requests to it.
+7. Copy the deployment URL and paste it into `index.html`.
 
-## 13. Troubleshooting
+## 5. Minimal Apps Script structure
+A typical implementation should:
 
-| Problem | Likely cause | Fix |
-|--------|--------------|-----|
-| Public form says config is missing | `config.js` still contains placeholders | Replace the values and re-upload |
-| Form submits but no email arrives | Resend domain/API issue | Verify domain, sender, and `RESEND_API_KEY` |
-| Email link opens but verification fails | Wrong `siteUrl` or token issue | Confirm `siteUrl` and function deployment |
-| Admin login fails with “email not confirmed” | User has not verified their auth email | Confirm the email from Supabase Auth |
-| Admin login works but no data loads | Missing admin role or RLS issue | Set `app_metadata.role = admin` |
-| CORS errors from functions | Function not deployed or wrong base URL | Check function deploy status and `edgeFunctionBase` |
+- accept `POST` requests
+- parse JSON from `e.postData.contents`
+- branch on `action === 'submit'` and `action === 'verify'`
+- generate and store a 6-digit code during submit
+- send the verification code by email
+- verify the code during the `verify` action
+- return JSON with the shapes shown above
 
----
+## 6. Example Apps Script skeleton
+```javascript
+function jsonResponse(payload) {
+  return ContentService
+    .createTextOutput(JSON.stringify(payload))
+    .setMimeType(ContentService.MimeType.JSON);
+}
 
-## 14. Launch checklist
+function doPost(e) {
+  var body = JSON.parse(e.postData.contents || '{}');
 
-- [ ] Migration executed successfully
-- [ ] Functions deployed
-- [ ] Secrets added
-- [ ] Resend sender verified
-- [ ] Admin user created and confirmed
-- [ ] Admin role set
-- [ ] `config.js` updated
-- [ ] Files uploaded to cPanel
-- [ ] Public form tested
-- [ ] Verification email tested
-- [ ] Admin dashboard tested
+  if (body.action === 'submit') {
+    // 1. validate fields
+    // 2. generate 6-digit code
+    // 3. store lead + code (Sheet / Properties / database)
+    // 4. send verification email
+    return jsonResponse({ status: 'verification_sent', reference: 'abc123' });
+  }
 
+  if (body.action === 'verify') {
+    // 1. look up stored lead by email/reference
+    // 2. compare submitted code
+    // 3. mark lead as verified
+    return jsonResponse({ status: 'verified', success: true });
+  }
+
+  return jsonResponse({ status: 'error', message: 'Unsupported action.' });
+}
+```
+
+## 7. Suggested storage options for Apps Script
+You can store leads and verification codes in any of these:
+
+- Google Sheets
+- Script Properties / User Properties (for small/simple workflows)
+- an external database you call from Apps Script
+
+Google Sheets is usually the fastest option for brochure-site lead capture.
+
+## 8. cPanel upload steps
+1. Zip or upload the site files listed in section 1.
+2. Place them in `public_html/` or your chosen document root.
+3. Confirm `assets/` stays in the same relative path.
+4. Replace the Apps Script placeholder in `index.html`.
+5. Clear any host/CDN cache.
+6. Load the site and test the form.
+
+## 9. Manual test checklist
+- Open the homepage.
+- Submit the form with all required fields.
+- Confirm the page shows `Verification email sent`.
+- Check that the 6-digit verification panel appears.
+- Enter a valid code and click `Verify`.
+- Confirm the thank-you state appears with the home link.
+- Try a repeated submit quickly to confirm the warning message appears.
+
+## 10. Notes
+- This site no longer depends on the removed Supabase/admin files.
+- The static pages continue to work as normal without any build step.
+- If your Apps Script needs CORS handling, return JSON consistently and deploy the script in Web App mode.
